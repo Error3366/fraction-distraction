@@ -2,7 +2,7 @@ import pygame
 import sys
 
 """
-Some cool code
+Some cool code + new comment
 """
 
 # initializes the game and pygame fonts
@@ -101,6 +101,76 @@ def menu(click, message, top_button, bottom_button):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
 
+        pygame.display.update()
+        clock.tick(60)
+
+
+def tutorial_select(message):
+    """ creates the level select screen where the user can pick between: easy, hard, 2-players
+
+    @param message: string for the message at the top of the screen
+    """
+
+    """---------------------------------SETUP-------------------------------"""
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    # Rects for the three buttons
+    easy_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) - 80, 370, 80)
+    hard_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) - 80, 370, 80)
+    multi_button = pygame.Rect((screen_width // 2) - 185, (screen_height // 2) + 40, 370, 80)
+
+    """"----------------------------------LOOP-------------------------------"""
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
+        if easy_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), easy_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                main_game(120, random.choices([-1, 1])[0] * 6, 4, 4, True)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), easy_button, 0, 5)
+
+        # Check for mouse over and mouse click on the hard button, button changes color on mouse over
+        if hard_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), hard_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                main_game(120, random.choices([-1, 1])[0] * 9, 8, 10, True)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), hard_button, 0, 5)
+
+        # Check for mouse over and mouse click on the 2-player button, button changes color on mouse over
+        if multi_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), multi_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                main_game(120, random.choices([-1, 1])[0] * 9, 8, 5, False)
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), multi_button, 0, 5)
+
+        # Draws text on the menu screen
+        draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text("Easy", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270, screen_height / 2 - 40)
+        draw_text("Hard", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270, screen_height / 2 - 40)
+        draw_text("2-Players", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        # updates the game and tick
         pygame.display.update()
         clock.tick(60)
 
