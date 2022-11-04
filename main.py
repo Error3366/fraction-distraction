@@ -1,6 +1,8 @@
 import pygame
 import sys
 
+# my comment
+# another comment
 
 """
 Seth: TEST COMMIT AND PUSH
