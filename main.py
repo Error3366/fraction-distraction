@@ -1,15 +1,6 @@
 import pygame
 import sys
 
-# my comment
-# another comment
-
-"""
-Seth: TEST COMMIT AND PUSH
-"""
-
-# Seth's second comment
-
 
 # initializes the game and pygame fonts
 pygame.init()
