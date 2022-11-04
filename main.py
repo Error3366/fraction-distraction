@@ -82,7 +82,7 @@ def menu(click, message, top_button, bottom_button):
             if click:
                 button_sound.play()
                 print("Tutorial Screen")
-                "TO DO"
+                tutorial_select("Select Tutorial")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), tutorial_button, 0, 5)
 
@@ -132,7 +132,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), easy_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                main_game(120, random.choices([-1, 1])[0] * 6, 4, 4, True)
+                print("Option 1")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), easy_button, 0, 5)
 
@@ -141,7 +141,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), hard_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                main_game(120, random.choices([-1, 1])[0] * 9, 8, 10, True)
+                print("Option 2")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), hard_button, 0, 5)
 
@@ -150,7 +150,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (64, 128, 230), multi_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                main_game(120, random.choices([-1, 1])[0] * 9, 8, 5, False)
+                print("Option 3")
         else:
             pygame.draw.rect(main_screen, (46, 102, 191), multi_button, 0, 5)
 
