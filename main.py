@@ -1,6 +1,12 @@
 import pygame
 import sys
 
+
+"""
+Seth: TEST COMMIT AND PUSH
+"""
+
+
 # initializes the game and pygame fonts
 pygame.init()
 pygame.font.init()
