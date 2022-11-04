@@ -1,6 +1,8 @@
 import pygame
 import sys
 
+# my comment
+
 # initializes the game and pygame fonts
 pygame.init()
 pygame.font.init()
