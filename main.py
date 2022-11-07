@@ -24,7 +24,7 @@ main_screen = pygame.display.set_mode((screen_width, screen_height))  # creates 
 # loads in the assets (background and fonts)
 start_background = pygame.image.load("Assets/start_bg.jpg")
 big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 70)
-small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 45)
+small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -105,6 +105,7 @@ def menu(click, message, top_button, bottom_button):
         clock.tick(60)
 
 
+# noinspection PyInterpreter
 def tutorial_select(message):
     """ creates the level select screen where the user can pick between: easy, hard, 2-players
 
@@ -117,9 +118,11 @@ def tutorial_select(message):
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
     # Rects for the three buttons
-    easy_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) - 80, 370, 80)
-    hard_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) - 80, 370, 80)
-    multi_button = pygame.Rect((screen_width // 2) - 185, (screen_height // 2) + 40, 370, 80)
+    add_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) - 80, 370, 80)
+    multiply_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) - 80, 370, 80)
+    lcd_button = pygame.Rect((screen_width // 2) - 185, (screen_height // 2) + 40, 370, 80)
+    transform_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) + 160, 370, 80)
+    y_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) +160, 370, 80)
 
     """"----------------------------------LOOP-------------------------------"""
     while True:  # screen loop
@@ -128,37 +131,58 @@ def tutorial_select(message):
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
         # Check for mouse over and mouse click on the easy button, button changes color on mouse over
-        if easy_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), easy_button, 0, 5)
+        if add_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
                 print("Option 1")
         else:
-            pygame.draw.rect(main_screen, (196, 16, 16), easy_button, 0, 5)
+            pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
         # Check for mouse over and mouse click on the hard button, button changes color on mouse over
-        if hard_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), hard_button, 0, 5)
+        if multiply_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
                 print("Option 2")
         else:
-            pygame.draw.rect(main_screen, (196, 16, 16), hard_button, 0, 5)
+            pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
 
         # Check for mouse over and mouse click on the 2-player button, button changes color on mouse over
-        if multi_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (64, 128, 230), multi_button, 0, 5)
+        if lcd_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
                 print("Option 3")
         else:
-            pygame.draw.rect(main_screen, (46, 102, 191), multi_button, 0, 5)
+            pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
+
+
+        if y_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                print("Option 4")
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), y_button, 0, 5)
+
+        if transform_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), transform_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                print("Option 5")
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
+
+
 
         # Draws text on the menu screen
         draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-        draw_text("Easy", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270, screen_height / 2 - 40)
-        draw_text("Hard", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270, screen_height / 2 - 40)
-        draw_text("2-Players", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
+        draw_text("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270, screen_height / 2 - 40)
+        draw_text("Multiply/Divide", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270, screen_height / 2 - 40)
+        draw_text("LCD", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
+        draw_text("Transform Fraction", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270, screen_height / 2 + 200)
+        draw_text("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270, screen_height / 2 + 200)
 
         click = False  # resets the mouse click
 
