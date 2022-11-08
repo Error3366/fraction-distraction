@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 """
 Some cool code + new comment
@@ -157,7 +158,6 @@ def tutorial_select(message):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
-
         if y_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
             if click:  # calls the main_game function and starts the game
@@ -173,8 +173,6 @@ def tutorial_select(message):
                 print("Option 5")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
-
-
 
         # Draws text on the menu screen
         draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
