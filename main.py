@@ -84,8 +84,10 @@ def menu(click, message, top_button, bottom_button):
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
     # Rects for the two buttons
-    start_button = pygame.Rect(screen_width / 2 - 185, screen_height / 2 - 80, 370, 80)
-    tutorial_button = pygame.Rect(screen_width / 2 - 185, screen_height / 2 + 40, 370, 80)
+    start_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 - 80, 370, 80)
+    tutorial_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 + 40, 370, 80)
+    quit_button = pygame.Rect(screen_width / 2 + 50, screen_height / 2 + 40, 370, 80)
+    shop_button = pygame.Rect(screen_width / 2 + 50, screen_height / 2 - 80, 370, 80)
 
     player = Player()
     print(player.total_money)
@@ -106,7 +108,7 @@ def menu(click, message, top_button, bottom_button):
             if click:
                 button_sound.play()
                 print("Betting Screen")
-                "TO DO"
+                "INSERT BETTING HERE"
         else:
             pygame.draw.rect(main_screen, (46, 102, 191), start_button, 0, 5)
 
@@ -120,10 +122,32 @@ def menu(click, message, top_button, bottom_button):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), tutorial_button, 0, 5)
 
+        # Check for mouse over and mouse click on the quit button, button changes color on mouse over
+        if quit_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), quit_button, 0, 5)
+            if click:
+                button_sound.play()
+                print("Quit")
+                sys.exit()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), quit_button, 0, 5)
+
+        # Check for mouse over and mouse click on the quit button, button changes color on mouse over
+        if shop_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), shop_button, 0, 5)
+            if click:
+                button_sound.play()
+                print("Shop")
+                """INSERT SHOP HERE"""
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), shop_button, 0, 5)
+
         # Draws text on the menu screen
         draw_text(message, big_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 170)
-        draw_text(top_button, small_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 40)
-        draw_text(bottom_button, small_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 + 80)
+        draw_text("Shop", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230, screen_height / 2 - 40)
+        draw_text("Betting", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230, screen_height / 2 - 40)
+        draw_text("Quit", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230, screen_height / 2 + 80)
+        draw_text("Tutorial", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230, screen_height / 2 + 80)
 
         click = False  # resets the click event, prevents one click -> two actions
 
