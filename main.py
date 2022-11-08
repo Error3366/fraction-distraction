@@ -263,7 +263,7 @@ def tutorial_select(message):
                 button_sound.play()
                 equation = ['6', 'x', '+', '3', 'y', '=', '9']
 
-                tutorials('Find Y-intercept form Tutorial', equation)
+                tutorials('Find Y-intercept form Tutorial')
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
@@ -297,13 +297,11 @@ def tutorial_select(message):
         clock.tick(60)
 
 
-
 def betting_screen():
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-
 
     smallbet_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
     medbet_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
@@ -347,8 +345,6 @@ def betting_screen():
                   screen_height / 2 + 100)
         draw_text("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400, screen_height / 2 + 100)
 
-
-
         click = False  # resets the mouse click
 
         # Checks for game events
@@ -364,14 +360,11 @@ def betting_screen():
         clock.tick(60)
 
 
-
 def tutorials(tutorial):
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
     return_button = pygame.Rect((screen_width // 2) + 500, (screen_height // 2) -300, 100, 100)
-
-
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -384,10 +377,7 @@ def tutorials(tutorial):
                 quit()
                 sys.exit()
 
-
-
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-
 
         click = False  # resets the mouse click
 
@@ -399,14 +389,9 @@ def tutorials(tutorial):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
 
-
         # updates the game and tick
         pygame.display.update()
         clock.tick(60)
-
-
-
-
 
 
 if __name__ == "__main__":
