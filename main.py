@@ -71,13 +71,11 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 
-def menu(click, message, top_button, bottom_button):
+def menu(click, message):
     """ creates the menu screen for the game
 
     @param click: state of the mouse, True if player presses Mouse 1
     @param message: string for the message at the top of the screen
-    @param top_button: string for the text for the top button
-    @param bottom_button: string for the text for the bottom button
     """
 
     """---------------------------------SETUP-------------------------------"""
@@ -181,6 +179,8 @@ def tutorial_select(message):
     lcd_button = pygame.Rect((screen_width // 2) - 185, (screen_height // 2) + 40, 370, 80)
     transform_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) + 160, 370, 80)
     y_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) + 160, 370, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
 
     """"----------------------------------LOOP-------------------------------"""
     while True:  # screen loop
@@ -231,7 +231,23 @@ def tutorial_select(message):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
-        # Draws text on the menu screen
+        if home_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), home_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                menu(mouse_click, "Fraction Distraction")
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), home_button, 0, 5)
+
+        if quit_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), quit_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                sys.exit()
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
+
+        # Draws text on the tutorial menu screen
         draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
         draw_text("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
                   screen_height / 2 - 40)
@@ -242,6 +258,8 @@ def tutorial_select(message):
                   screen_height / 2 + 200)
         draw_text("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
                   screen_height / 2 + 200)
+        draw_text("Home", small_font, (255, 255, 255), main_screen, 90, 50)
+        draw_text("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
         click = False  # resets the mouse click
 
@@ -259,4 +277,4 @@ def tutorial_select(message):
 
 
 if __name__ == "__main__":
-    menu(mouse_click, "Fraction Distraction", "Enter!", "Tutorial")
+    menu(mouse_click, "Fraction Distraction")
