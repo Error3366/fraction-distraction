@@ -28,6 +28,33 @@ big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.total_money = 100  # this can be changed later
+        self.bet_won = 0
+        self.money_won = 0
+        self.money_on_table = 0
+        self.items = []
+        self.tutorials_completed = []
+
+    def bet(self, total_bet):
+        """ deducts and sets up the betting game
+
+        :param total_bet: amount the Player wants to bet
+        :return:
+        """
+
+        self.total_money -= total_bet
+        self.money_on_table += total_bet
+
+    def win(self, bet_type):
+        """calculates the winnings"""
+
+        self.total_money += self.money_on_table * (1.1 if bet_type == "small" else 1.3 if bet_type == "medium" else 1.5)
+        self.money_on_table = 0
+
+
 def draw_text(text, font, color, surface, x, y):
     """ creates a text box
 
@@ -61,6 +88,13 @@ def menu(click, message, top_button, bottom_button):
     # Rects for the two buttons
     start_button = pygame.Rect(screen_width / 2 - 185, screen_height / 2 - 80, 370, 80)
     tutorial_button = pygame.Rect(screen_width / 2 - 185, screen_height / 2 + 40, 370, 80)
+
+    player = Player()
+    print(player.total_money)
+    print(player.bet(50))
+    print(player.total_money)
+    print(player.win("big"))
+    print(player.total_money)
 
     """"----------------------------------LOOP-------------------------------"""
     while True:
@@ -159,7 +193,6 @@ def tutorial_select(message):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
-
         if y_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
             if click:  # calls the main_game function and starts the game
@@ -176,15 +209,17 @@ def tutorial_select(message):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
-
-
         # Draws text on the menu screen
         draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-        draw_text("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270, screen_height / 2 - 40)
-        draw_text("Multiply/Divide", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270, screen_height / 2 - 40)
+        draw_text("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
+                  screen_height / 2 - 40)
+        draw_text("Multiply/Divide", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
+                  screen_height / 2 - 40)
         draw_text("LCD", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
-        draw_text("Transform Fraction", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270, screen_height / 2 + 200)
-        draw_text("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270, screen_height / 2 + 200)
+        draw_text("Transform Fraction", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
+                  screen_height / 2 + 200)
+        draw_text("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
+                  screen_height / 2 + 200)
 
         click = False  # resets the mouse click
 
