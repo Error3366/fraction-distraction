@@ -136,8 +136,8 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (64, 128, 230), start_button, 0, 5)
             if click:
                 button_sound.play()
-                bet()
-                "TO DO"
+                betting_screen()
+
         else:
             pygame.draw.rect(main_screen, (46, 102, 191), start_button, 0, 5)
 
@@ -298,7 +298,7 @@ def tutorial_select(message):
 
 
 
-def bet():
+def betting_screen():
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
