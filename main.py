@@ -245,7 +245,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find Least Common Denominator Tutorial')
+                tutorials('Find LCD Tutorial')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
@@ -253,7 +253,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find Y-intercept form Tutorial')
+                tutorials('Transform Fraction Tutorial')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), y_button, 0, 5)
 
@@ -261,7 +261,10 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), transform_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Transform Fraction Tutorial')
+                equation = ['6', 'x', '+', '3', 'y', '=', '9']
+
+                tutorials('Find Y-intercept form Tutorial', equation)
+
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
@@ -363,19 +366,38 @@ def bet():
 
 
 def tutorials(tutorial):
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+    return_button = pygame.Rect((screen_width // 2) + 500, (screen_height // 2) -300, 100, 100)
+
+
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
-        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-
-
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
         # Checks for game events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
                 sys.exit()
+
+
+
+        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
 
 
         # updates the game and tick
