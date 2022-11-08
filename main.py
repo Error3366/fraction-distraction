@@ -71,6 +71,36 @@ def draw_text(text, font, color, surface, x, y):
     surface.blit(textobj, textrect)
 
 
+def universal_UI(home_button, quit_button, mx, my, click):
+    """ creates the basic home button (top left) and quit button (top right)
+
+    :param quit_button:
+    :param home_button:
+    :param mx:
+    :param my:
+    :param click:
+    """
+
+    if home_button.collidepoint((mx, my)):
+        pygame.draw.rect(main_screen, (64, 128, 230), home_button, 0, 5)
+        if click:  # calls the main_game function and starts the game
+            button_sound.play()
+            menu(mouse_click, "Fraction Distraction")
+    else:
+        pygame.draw.rect(main_screen, (46, 102, 191), home_button, 0, 5)
+
+    if quit_button.collidepoint((mx, my)):
+        pygame.draw.rect(main_screen, (64, 128, 230), quit_button, 0, 5)
+        if click:  # calls the main_game function and starts the game
+            button_sound.play()
+            sys.exit()
+    else:
+        pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
+
+    draw_text("Home", small_font, (255, 255, 255), main_screen, 90, 50)
+    draw_text("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
+
+
 def menu(click, message):
     """ creates the menu screen for the game
 
@@ -188,6 +218,8 @@ def tutorial_select(message):
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
+        universal_UI(home_button, quit_button, mx, my, click)
+
         # Check for mouse over and mouse click on the easy button, button changes color on mouse over
         if add_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
@@ -231,22 +263,6 @@ def tutorial_select(message):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
-        if home_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (64, 128, 230), home_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
-                button_sound.play()
-                menu(mouse_click, "Fraction Distraction")
-        else:
-            pygame.draw.rect(main_screen, (46, 102, 191), home_button, 0, 5)
-
-        if quit_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (64, 128, 230), quit_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
-                button_sound.play()
-                sys.exit()
-        else:
-            pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
-
         # Draws text on the tutorial menu screen
         draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
         draw_text("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
@@ -258,12 +274,12 @@ def tutorial_select(message):
                   screen_height / 2 + 200)
         draw_text("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
                   screen_height / 2 + 200)
-        draw_text("Home", small_font, (255, 255, 255), main_screen, 90, 50)
-        draw_text("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
+        # draw_text("Home", small_font, (255, 255, 255), main_screen, 90, 50)
+        # draw_text("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
         click = False  # resets the mouse click
 
-        # Checks for game events
+        # checks for game events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 quit()
