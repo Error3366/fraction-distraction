@@ -21,9 +21,10 @@ mouse_click = False
 
 main_screen = pygame.display.set_mode((screen_width, screen_height))  # creates the main screen of the game
 
+
 # loads in the assets (background and fonts)
 start_background = pygame.image.load("Assets/start_bg.jpg")
-big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 70)
+big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 
@@ -56,14 +57,15 @@ def menu(click, message, top_button, bottom_button):
     """---------------------------------SETUP-------------------------------"""
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
+
     # Rects for the two buttons
     start_button = pygame.Rect(screen_width / 2 - 185, screen_height / 2 - 80, 370, 80)
     tutorial_button = pygame.Rect(screen_width / 2 - 185, screen_height / 2 + 40, 370, 80)
 
     """"----------------------------------LOOP-------------------------------"""
     while True:
-        main_screen.blit(start_background, (0, 0))  # creates the background image
 
+        main_screen.blit(start_background, (0, 0))  # creates the background image
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
         # Check for mouse over and mouse click on the start button, button changes color on mouse over
@@ -71,7 +73,7 @@ def menu(click, message, top_button, bottom_button):
             pygame.draw.rect(main_screen, (64, 128, 230), start_button, 0, 5)
             if click:
                 button_sound.play()
-                print("Betting Screen")
+                bet()
                 "TO DO"
         else:
             pygame.draw.rect(main_screen, (46, 102, 191), start_button, 0, 5)
@@ -81,7 +83,6 @@ def menu(click, message, top_button, bottom_button):
             pygame.draw.rect(main_screen, (240, 20, 20), tutorial_button, 0, 5)
             if click:
                 button_sound.play()
-                print("Tutorial Screen")
                 tutorial_select("Select Tutorial")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), tutorial_button, 0, 5)
@@ -117,12 +118,12 @@ def tutorial_select(message):
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
-    # Rects for the three buttons
+    # Rects for the tutorial buttons
     add_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) - 80, 370, 80)
     multiply_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) - 80, 370, 80)
     lcd_button = pygame.Rect((screen_width // 2) - 185, (screen_height // 2) + 40, 370, 80)
     transform_button = pygame.Rect((screen_width // 2) - 455, (screen_height // 2) + 160, 370, 80)
-    y_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) +160, 370, 80)
+    y_button = pygame.Rect((screen_width // 2) + 85, (screen_height // 2) + 160, 370, 80)
 
     """"----------------------------------LOOP-------------------------------"""
     while True:  # screen loop
@@ -135,7 +136,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                print("Option 1")
+                tutorials('Addition/Subtraction Tutorial')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
@@ -144,7 +145,8 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                print("Option 2")
+                tutorials('Multiplication/Division Tutorial')
+
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
 
@@ -153,7 +155,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                print("Option 3")
+                tutorials('Find Least Common Denominator Tutorial')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
@@ -162,7 +164,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                print("Option 4")
+                tutorials('Find Y-intercept form Tutorial')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), y_button, 0, 5)
 
@@ -170,7 +172,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), transform_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                print("Option 5")
+                tutorials('Transform Fraction Tutorial')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
@@ -197,6 +199,99 @@ def tutorial_select(message):
         # updates the game and tick
         pygame.display.update()
         clock.tick(60)
+
+
+
+def bet():
+    """---------------------------------SETUP-------------------------------"""
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+
+    smallbet_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
+    medbet_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
+    bigbet_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+
+    """"----------------------------------LOOP-------------------------------"""
+    
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
+        if smallbet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), smallbet_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), smallbet_button, 0, 5)
+
+        if medbet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), medbet_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), medbet_button, 0, 5)
+
+        if bigbet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), bigbet_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), bigbet_button, 0, 5)
+
+        draw_text("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 410,
+                  screen_height / 2 + 100)
+        draw_text("Bet Medium", small_font, (255, 255, 255), main_screen, (screen_width // 2) ,
+                  screen_height / 2 + 100)
+        draw_text("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400, screen_height / 2 + 100)
+
+
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+
+def tutorials(tutorial):
+
+    while True:
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+
+
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+
+
 
 
 if __name__ == "__main__":
