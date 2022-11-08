@@ -306,6 +306,8 @@ def betting_screen():
     smallbet_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
     medbet_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
     bigbet_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
 
     """"----------------------------------LOOP-------------------------------"""
 
@@ -313,6 +315,8 @@ def betting_screen():
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
 
         # Check for mouse over and mouse click on the easy button, button changes color on mouse over
         if smallbet_button.collidepoint((mx, my)):
@@ -341,7 +345,7 @@ def betting_screen():
 
         draw_text("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 410,
                   screen_height / 2 + 100)
-        draw_text("Bet Medium", small_font, (255, 255, 255), main_screen, (screen_width // 2) ,
+        draw_text("Bet Medium", small_font, (255, 255, 255), main_screen, (screen_width // 2),
                   screen_height / 2 + 100)
         draw_text("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400, screen_height / 2 + 100)
 
