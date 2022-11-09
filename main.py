@@ -345,7 +345,7 @@ def betting_screen():
 
         draw_text("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                   screen_height / 2 + 100)
-        draw_text("Bet Medium", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+        draw_text("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
                   screen_height / 2 + 100)
         draw_text("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400, screen_height / 2 + 100)
 
