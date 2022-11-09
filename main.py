@@ -1,5 +1,6 @@
 import pygame
 import sys
+from fractions import Fraction
 
 """
 Some cool code + new comment
@@ -303,6 +304,11 @@ def betting_screen():
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
     smallbet_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
     medbet_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
     bigbet_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
@@ -323,7 +329,7 @@ def betting_screen():
             pygame.draw.rect(main_screen, (240, 20, 20), smallbet_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-
+                betting_game_screen("small")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), smallbet_button, 0, 5)
 
@@ -331,7 +337,7 @@ def betting_screen():
             pygame.draw.rect(main_screen, (240, 20, 20), medbet_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-
+                betting_game_screen("med")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), medbet_button, 0, 5)
 
@@ -339,7 +345,7 @@ def betting_screen():
             pygame.draw.rect(main_screen, (240, 20, 20), bigbet_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-
+                betting_game_screen("big")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), bigbet_button, 0, 5)
 
@@ -348,6 +354,84 @@ def betting_screen():
         draw_text("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
                   screen_height / 2 + 100)
         draw_text("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400, screen_height / 2 + 100)
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        main_screen.blit(table, table_rec)
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def betting_game_screen(mode):
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    small_questions = {"add": "Placeholder", "divide": ((Fraction(6, 9), Fraction(9, 6), Fraction(36, 81)),
+                                                        (Fraction(3, 7), Fraction(21, 12), Fraction(12, 49)))}
+
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
+    item1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
+    item2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
+    item3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
+        if item1_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), item1_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), item1_button, 0, 5)
+
+        if item2_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), item2_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), item2_button, 0, 5)
+
+        if item3_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), item3_button, 0, 5)
+
+        main_screen.blit(table, table_rec)
+        draw_text("Sample Question", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                  200)
+
+        draw_text("[ITEM 1]", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                  screen_height // 2 + 100)
+        draw_text("[ITEM 2]", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                  screen_height // 2 + 100)
+        draw_text("[ITEM 3]", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                  screen_height // 2 + 100)
 
         click = False  # resets the mouse click
 
