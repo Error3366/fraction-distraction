@@ -1,6 +1,7 @@
 import pygame
 import sys
 from fractions import Fraction
+import random
 
 """
 Some cool code + new comment
@@ -385,9 +386,20 @@ def betting_game_screen(mode):
     table_rec = table.get_rect()
     table_rec.center = (640, 200)
 
+    fraction_1 = Fraction(6, 9)
+    fraction_2 = Fraction(9, 6)
+    answer = fraction_1/fraction_2
+    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
+    fake_answer_2 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
+    while fake_answer_1 == fake_answer_2 or fake_answer_1 == answer or fake_answer_2 == answer:
+        fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
+
     item1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
     item2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
     item3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+    ans1 = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 200, 200, 80)
+    ans2 = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 200, 200, 80)
+    ans3 = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 200, 200, 80)
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
@@ -422,9 +434,30 @@ def betting_game_screen(mode):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), item3_button, 0, 5)
 
+        if ans1.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), ans1, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
+
+        if ans2.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), ans2, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
+
+        if ans3.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), ans3, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
+
         main_screen.blit(table, table_rec)
-        draw_text("Sample Question", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  200)
+        draw_text(f"{fraction_1} ÷ {fraction_2}",
+                  big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
         draw_text("[ITEM 1]", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                   screen_height // 2 + 100)
@@ -432,6 +465,13 @@ def betting_game_screen(mode):
                   screen_height // 2 + 100)
         draw_text("[ITEM 3]", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                   screen_height // 2 + 100)
+
+        draw_text(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                  screen_height // 2 + 240)
+        draw_text(f"{fake_answer_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                  screen_height // 2 + 240)
+        draw_text(f"{fake_answer_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                  screen_height // 2 + 240)
 
         click = False  # resets the mouse click
 
