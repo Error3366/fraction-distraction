@@ -107,7 +107,7 @@ def money_UI(player_info):
     money_rect.center = (1240, 675)
 
     main_screen.blit(money, money_rect)
-    draw_text_outline(f"${player_info.total_money}", small_font, (255, 255, 255), main_screen, 1160, 680)
+    draw_text_outline(f"${player_info.total_money}", medium_font, (255, 255, 255), main_screen, 1160, 680)
 
 
 def answer_choice_text(correct_option, answer, fake_1, fake_2):
@@ -812,6 +812,19 @@ def shop_screen():
                           screen_height / 2 + 60)
         draw_text_outline("Life Line", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 + 160)
+        draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                          screen_height / 2 - 40)
+        draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                          screen_height / 2 + 60)
+        draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                          screen_height / 2 + 160)
+
+        draw_text_outline(f"X2: {player.items['double_bet']}", medium_font, (255, 255, 255), main_screen,
+                          screen_width / 2 - 300, 680)
+        draw_text_outline(f"X3: {player.items['triple_bet']}", medium_font, (255, 255, 255), main_screen,
+                          screen_width / 2, 680)
+        draw_text_outline(f"Life_Line: {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
+                          screen_width / 2 + 300, 680)
 
         money_UI(player)
 
