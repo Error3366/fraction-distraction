@@ -1,3 +1,4 @@
+from classes import Player
 import pygame
 import sys
 from fractions import Fraction
@@ -23,37 +24,6 @@ main_screen = pygame.display.set_mode((screen_width, screen_height))  # creates 
 start_background = pygame.image.load("Assets/start_bg.jpg")
 big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
-
-
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.total_money = 100  # this can be changed later
-        self.bet_won = 0
-        self.total_money_won = 0
-        self.money_on_table = 0
-        self.items = []
-        self.tutorials_completed = []
-
-    def bet(self, total_bet):
-        """deducts and sets up the betting game
-
-        :param total_bet: amount the Player wants to bet
-        :return:
-        """
-
-        self.money_on_table += total_bet
-
-    def win(self, bet_type):
-        """calculates the winnings"""
-
-        money_won = int(self.money_on_table * (0.1 if bet_type == "small"
-                                               else 0.3 if bet_type == "med" else 0.5))
-        self.total_money += money_won
-        self.total_money_won += money_won
-        self.money_on_table = 0
-
-        return money_won
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -659,7 +629,7 @@ def results(mode, outcome, answer, fraction_1, fraction_2):
         money_won = player.win(mode)
     else:
         wage = player.money_on_table
-        player.money_on_table = 0
+        player.lose()
 
     table = pygame.image.load("Assets/table.png")
     table = pygame.transform.scale(table, (765, 464))
@@ -683,9 +653,9 @@ def results(mode, outcome, answer, fraction_1, fraction_2):
                               screen_height / 2 + 100)
         else:
             draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 100)
+                              screen_height / 2 + 100)
             draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 150)
+                              screen_height / 2 + 150)
 
         money_UI(player)
 
@@ -729,7 +699,7 @@ def tutorials(tutorial):
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
         draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-        draw_text_outline('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
+        draw_text_outline('Next', small_font, (255, 255, 255), main_screen, screen_width // 2, 650)
         draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
 
         click = False  # resets the mouse click
