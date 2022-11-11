@@ -3,6 +3,10 @@ import sys
 from fractions import Fraction
 import random
 
+"""
+Some cool code + new comment
+"""
+
 # initializes the game and pygame fonts
 pygame.init()
 pygame.font.init()
@@ -30,7 +34,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.total_money = 100  # this can be changed later
         self.bet_won = 0
-        self.total_money_won = 0
+        self.money_won = 0
         self.money_on_table = 0
         self.items = []
         self.tutorials_completed = []
@@ -42,15 +46,15 @@ class Player(pygame.sprite.Sprite):
         :return:
         """
 
+        self.total_money -= total_bet
         self.money_on_table += total_bet
 
     def win(self, bet_type):
         """calculates the winnings"""
 
-        money_won = int(self.money_on_table * (0.1 if bet_type == "small"
-                                               else 0.3 if bet_type == "med" else 0.5))
-        self.total_money += money_won
-        self.total_money_won += money_won
+        money_won = int(self.money_on_table * (1.1 if bet_type == "small"
+                                               else 1.3 if bet_type == "med" else 1.5))
+        self.total_money += self.money_won
         self.money_on_table = 0
 
         return money_won
@@ -260,6 +264,7 @@ def menu(click, message):
         clock.tick(60)
 
 
+# noinspection PyInterpreter
 def tutorial_select(message):
     """ creates the level select screen where the user can pick between: easy, hard, 2-players
 
@@ -293,7 +298,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Addition/Subtraction Tutorial')
+                tutorials('Adding/Subtracting Fractions')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
@@ -302,7 +307,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Multiplication/Division Tutorial')
+                tutorials('Multiplying/Dividing Fractions')
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
@@ -312,7 +317,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find LCD Tutorial')
+                tutorials('Find Least Common Demoniator')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
@@ -320,7 +325,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Transform Fraction Tutorial')
+                tutorials('Transform Fraction')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), y_button, 0, 5)
 
@@ -328,9 +333,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), transform_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                equation = ['6', 'x', '+', '3', 'y', '=', '9']
-
-                tutorials('Find Y-intercept form Tutorial')
+                tutorials('Find Y-intercept Form')
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
@@ -592,10 +595,10 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 1:
-                    results(mode, True, answer)
+                    results(mode, True)
                     # menu(click, "Fraction Distraction")
                 else:
-                    results(mode, False, answer)
+                    results(mode, False)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
 
@@ -604,9 +607,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 2:
-                    results(mode, True, answer)
+                    results(mode, True)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
 
@@ -615,9 +618,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 3:
-                    results(mode, True, answer)
+                    results(mode, True)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
 
@@ -653,17 +656,14 @@ def betting_game_screen(mode):
         clock.tick(60)
 
 
-def results(mode, outcome, answer):
+def results(mode, outcome):
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
-    if outcome:
-        money_won = player.win(mode)
-    else:
-        wage = player.money_on_table
-        player.money_on_table = 0
+    wage = player.money_on_table
+    money_won = player.win(mode)
 
     table = pygame.image.load("Assets/table.png")
     table = pygame.transform.scale(table, (765, 464))
@@ -683,13 +683,8 @@ def results(mode, outcome, answer):
         universal_UI(home_button, quit_button, mx, my, click)
 
         if outcome:
-            draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height / 2 + 100)
-        else:
-            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+            draw_text(f"Correct!", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                       screen_height / 2 + 100)
-            draw_text(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 150)
 
         money_UI(player)
 
@@ -714,20 +709,26 @@ def tutorials(tutorial):
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-    return_button = pygame.Rect((screen_width // 2) + 500, (screen_height // 2) - 300, 100, 100)
+    next_button = pygame.Rect((screen_width // 2) - 100, 600, 200, 100)
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-                sys.exit()
+        if next_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), next_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                tutorials('Find Y-intercept Form')
+
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
+
+
 
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
 
         click = False  # resets the mouse click
 
