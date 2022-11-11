@@ -1,3 +1,4 @@
+from classes import Player, Yintercept
 import pygame
 import sys
 from fractions import Fraction
@@ -23,12 +24,6 @@ main_screen = pygame.display.set_mode((screen_width, screen_height))  # creates 
 start_background = pygame.image.load("Assets/start_bg.jpg")
 big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
-
-
-class Yintercept:
-    def __init__(self, equation):
-        self.equation = equation[0] + '+' + equation[1] + '=' + equation[2]
-        self.step1 = equation[1] + '=' + '-' + equation[0] + '+' + equation[2]
 
 
 def draw_text(text, font, color, surface, x, y):

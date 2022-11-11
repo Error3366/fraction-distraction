@@ -32,3 +32,9 @@ class Player:
 
         self.total_money -= self.money_on_table
         self.money_on_table = 0
+
+
+class Yintercept:
+    def __init__(self, equation):
+        self.equation = equation[0] + '+' + equation[1] + '=' + equation[2]
+        self.step1 = equation[1] + '=' + '-' + equation[0] + '+' + equation[2]
