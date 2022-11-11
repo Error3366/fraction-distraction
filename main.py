@@ -716,19 +716,19 @@ def results(mode, outcome, answer):
 
 
 def tutorial_steps(tutorial):
+    steps = []
     if tutorial == 'Find Y-intercept Form':
-        steps = Yintercept(['6x','7y','9'])
-        equation = steps.equation
-
-
-        return equation
+        tut = Yintercept(['6x','7y','9'])
+        steps.append(tut.equation)
+        return steps
 
 
 
 
 
 def tutorials(tutorial):
-    equation = tutorial_steps(tutorial)
+    steps = tutorial_steps(tutorial)
+    equation = steps[0]
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
@@ -736,6 +736,8 @@ def tutorials(tutorial):
 
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    clicks = []
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -749,12 +751,15 @@ def tutorials(tutorial):
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
                 tutorials('Find Y-intercept Form')
+                clicks.append(1)
+                print(len(clicks))
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
 
-
+        if len(clicks) == 1:
+            print('yes')
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
         draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
