@@ -55,6 +55,11 @@ class Player(pygame.sprite.Sprite):
 
         return money_won
 
+class Yintercept:
+    def __init__(self, equation):
+        self.equation = equation[0] + '+' + equation[1] + '=' + equation[2]
+        self.step1 = equation[1] + '=' + '-' + equation[0] + '+' + equation[2]
+
 
 def draw_text(text, font, color, surface, x, y):
     """ creates a text box
@@ -707,16 +712,37 @@ def results(mode, outcome, answer):
         clock.tick(60)
 
 
+
+
+
+def tutorial_steps(tutorial):
+    if tutorial == 'Find Y-intercept Form':
+        steps = Yintercept(['6x','7y','9'])
+        equation = steps.equation
+
+
+        return equation
+
+
+
+
+
 def tutorials(tutorial):
+    equation = tutorial_steps(tutorial)
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
     next_button = pygame.Rect((screen_width // 2) - 100, 600, 200, 100)
 
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
 
         if next_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), next_button, 0, 5)
@@ -729,9 +755,10 @@ def tutorials(tutorial):
 
 
 
-        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
+        draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
         draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
-        draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+
 
         click = False  # resets the mouse click
 
