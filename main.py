@@ -292,7 +292,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Addition/Subtraction Tutorial')
+                tutorials('Adding/Subtracting Fractions')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
@@ -301,7 +301,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Multiplication/Division Tutorial')
+                tutorials('Multiplying/Dividing Fractions')
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
@@ -311,7 +311,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find LCD Tutorial')
+                tutorials('Find Least Common Demoniator')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
@@ -319,7 +319,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), y_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Transform Fraction Tutorial')
+                tutorials('Transform Fraction')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), y_button, 0, 5)
 
@@ -327,9 +327,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), transform_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                equation = ['6', 'x', '+', '3', 'y', '=', '9']
-
-                tutorials('Find Y-intercept form Tutorial')
+                tutorials('Find Y-intercept Form')
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
@@ -684,10 +682,10 @@ def results(mode, outcome, answer, fraction_1, fraction_2):
             draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                               screen_height / 2 + 100)
         else:
-            draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height / 2 + 100)
-            draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height / 2 + 150)
+            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                      screen_height / 2 + 100)
+            draw_text(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                      screen_height / 2 + 150)
 
         money_UI(player)
 
@@ -714,19 +712,26 @@ def tutorials(tutorial):
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-    return_button = pygame.Rect((screen_width // 2) + 500, (screen_height // 2) - 300, 100, 100)
+    next_button = pygame.Rect((screen_width // 2) - 100, 600, 200, 100)
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-                sys.exit()
+        if next_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), next_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                tutorials('Find Y-intercept Form')
 
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
+
+
+
+        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
         draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
 
         click = False  # resets the mouse click
