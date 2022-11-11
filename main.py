@@ -591,10 +591,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 1:
-                    results(mode, True, answer)
-                    # menu(click, "Fraction Distraction")
+                    results(mode, True, answer, fraction_1, fraction_2)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False, answer, fraction_1, fraction_2)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
 
@@ -603,9 +602,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 2:
-                    results(mode, True, answer)
+                    results(mode, True, answer, fraction_1, fraction_2)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False, answer, fraction_1, fraction_2)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
 
@@ -614,9 +613,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 3:
-                    results(mode, True, answer)
+                    results(mode, True, answer, fraction_1, fraction_2)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False, answer, fraction_1, fraction_2)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
 
@@ -652,7 +651,7 @@ def betting_game_screen(mode):
         clock.tick(60)
 
 
-def results(mode, outcome, answer):
+def results(mode, outcome, answer, fraction_1, fraction_2):
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -703,6 +702,8 @@ def results(mode, outcome, answer):
                 click = True
 
         main_screen.blit(table, table_rec)
+        draw_text_outline(f"{fraction_1} ÷ {fraction_2}",
+                          big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
         # updates the game and tick
         pygame.display.update()
