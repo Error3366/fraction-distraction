@@ -52,9 +52,12 @@ class Player(pygame.sprite.Sprite):
     def win(self, bet_type):
         """calculates the winnings"""
 
-        self.total_money += int(self.money_on_table * (1.1 if bet_type == "small"
-                                                       else 1.3 if bet_type == "med" else 1.5))
+        money_won = int(self.money_on_table * (1.1 if bet_type == "small"
+                                               else 1.3 if bet_type == "med" else 1.5))
+        self.total_money += self.money_won
         self.money_on_table = 0
+
+        return money_won
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -414,6 +417,7 @@ def betting_screen():
 
 def wager_screen(mode):
     """---------------------------------SETUP-------------------------------"""
+
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
@@ -493,6 +497,8 @@ def wager_screen(mode):
 
 
 def betting_game_screen(mode):
+    """---------------------------------SETUP-------------------------------"""
+
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
@@ -560,8 +566,10 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 1:
-                    player.win(mode)
-                    menu(click, "Fraction Distraction")
+                    results(mode, True)
+                    # menu(click, "Fraction Distraction")
+                else:
+                    results(mode, False)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
 
@@ -570,8 +578,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 2:
-                    player.win(mode)
-                    menu(mouse_click, "Fraction Distraction")
+                    results(mode, True)
+                else:
+                    results(mode, False)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
 
@@ -580,8 +589,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 3:
-                    player.win(mode)
-                    menu(mouse_click, "Fraction Distraction")
+                    results(mode, True)
+                else:
+                    results(mode, False)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
 
@@ -611,6 +621,55 @@ def betting_game_screen(mode):
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 click = True
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def results(mode, outcome):
+    """---------------------------------SETUP-------------------------------"""
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    wage = player.money_on_table
+    money_won = player.win(mode)
+
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        if outcome:
+            draw_text(f"Correct!", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                      screen_height / 2 + 100)
+
+        money_UI(player)
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        main_screen.blit(table, table_rec)
 
         # updates the game and tick
         pygame.display.update()
