@@ -3,10 +3,6 @@ import sys
 from fractions import Fraction
 import random
 
-"""
-Some cool code + new comment
-"""
-
 # initializes the game and pygame fonts
 pygame.init()
 pygame.font.init()
@@ -34,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.total_money = 100  # this can be changed later
         self.bet_won = 0
-        self.money_won = 0
+        self.total_money_won = 0
         self.money_on_table = 0
         self.items = []
         self.tutorials_completed = []
@@ -46,15 +42,15 @@ class Player(pygame.sprite.Sprite):
         :return:
         """
 
-        self.total_money -= total_bet
         self.money_on_table += total_bet
 
     def win(self, bet_type):
         """calculates the winnings"""
 
-        money_won = int(self.money_on_table * (1.1 if bet_type == "small"
-                                               else 1.3 if bet_type == "med" else 1.5))
-        self.total_money += self.money_won
+        money_won = int(self.money_on_table * (0.1 if bet_type == "small"
+                                               else 0.3 if bet_type == "med" else 0.5))
+        self.total_money += money_won
+        self.total_money_won += money_won
         self.money_on_table = 0
 
         return money_won
@@ -88,24 +84,19 @@ def draw_text_outline(text, font, color, surface, x, y):
     :param y: y-position of the text - middle of the text bos
     """
 
-    black_color = (0, 0, 0)
+    if font == small_font:
+        draw_text(text, font, color, surface, x, y)
+    else:
+        black_color = (0, 0, 0)
 
-    # Draws the black outline
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) - 2,
-              (screen_height / 2 + 100) - 2)
+        # Draws the black outline
+        draw_text(text, font, black_color, surface, x - 2, y - 2)
+        draw_text(text, font, black_color, surface, x - 2, y + 2)
+        draw_text(text, font, black_color, surface, x + 2, y - 2)
+        draw_text(text, font, black_color, surface, x + 2, y + 2)
 
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) - 2,
-              (screen_height / 2 + 100) + 2)
-
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) + 2,
-              (screen_height / 2 + 100) - 2)
-
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) + 2,
-              (screen_height / 2 + 100) + 2)
-
-    # Draws the real text against black background text
-    draw_text(text, big_font, color, main_screen, (screen_width // 2),
-              screen_height / 2 + 100)
+        # Draws the real text against black background text
+        draw_text(text, font, color, surface, x, y)
 
 
 def universal_UI(home_button, quit_button, mx, my, click):
@@ -134,8 +125,8 @@ def universal_UI(home_button, quit_button, mx, my, click):
     else:
         pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
 
-    draw_text("Home", small_font, (255, 255, 255), main_screen, 90, 50)
-    draw_text("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
+    draw_text_outline("Home", small_font, (255, 255, 255), main_screen, 90, 50)
+    draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
 
 def money_UI(player_info):
@@ -145,7 +136,7 @@ def money_UI(player_info):
     money_rect.center = (1240, 675)
 
     main_screen.blit(money, money_rect)
-    draw_text(f"${player_info.total_money}", small_font, (255, 255, 255), main_screen, 1160, 680)
+    draw_text_outline(f"${player_info.total_money}", small_font, (255, 255, 255), main_screen, 1160, 680)
 
 
 def answer_choice_text(correct_option, answer, fake_1, fake_2):
@@ -158,26 +149,26 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
     """
 
     if correct_option == 1:
-        draw_text(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                  screen_height // 2 + 240)  # answer 1
-        draw_text(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  screen_height // 2 + 240)  # answer 2
-        draw_text(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                  screen_height // 2 + 240)  # answer 3
+        draw_text_outline(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 240)  # answer 1
+        draw_text_outline(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 240)  # answer 2
+        draw_text_outline(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 240)  # answer 3
     elif correct_option == 2:
-        draw_text(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                  screen_height // 2 + 240)  # answer 1
-        draw_text(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  screen_height // 2 + 240)  # answer 2
-        draw_text(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                  screen_height // 2 + 240)  # answer 3
+        draw_text_outline(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 240)  # answer 1
+        draw_text_outline(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 240)  # answer 2
+        draw_text_outline(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 240)  # answer 3
     else:
-        draw_text(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                  screen_height // 2 + 240)  # answer 1
-        draw_text(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  screen_height // 2 + 240)  # answer 2
-        draw_text(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                  screen_height // 2 + 240)  # answer 3
+        draw_text_outline(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 240)  # answer 1
+        draw_text_outline(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 240)  # answer 2
+        draw_text_outline(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 240)  # answer 3
 
 
 def menu(click, message):
@@ -242,11 +233,15 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (196, 16, 16), shop_button, 0, 5)
 
         # Draws text on the menu screen
-        draw_text(message, big_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 170)
-        draw_text("Shop", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230, screen_height / 2 - 40)
-        draw_text("Betting", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230, screen_height / 2 - 40)
-        draw_text("Quit", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230, screen_height / 2 + 80)
-        draw_text("Tutorial", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230, screen_height / 2 + 80)
+        draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 170)
+        draw_text_outline("Shop", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                          screen_height / 2 - 40)
+        draw_text_outline("Betting", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+                          screen_height / 2 - 40)
+        draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                          screen_height / 2 + 80)
+        draw_text_outline("Tutorial", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+                          screen_height / 2 + 80)
 
         money_UI(player)
 
@@ -264,7 +259,6 @@ def menu(click, message):
         clock.tick(60)
 
 
-# noinspection PyInterpreter
 def tutorial_select(message):
     """ creates the level select screen where the user can pick between: easy, hard, 2-players
 
@@ -339,18 +333,18 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
         # Draws text on the tutorial menu screen
-        draw_text(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-        draw_text("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
-                  screen_height / 2 - 40)
-        draw_text("Multiply/Divide", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
-                  screen_height / 2 - 40)
-        draw_text("LCD", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
-        draw_text("Transform Fraction", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
-                  screen_height / 2 + 200)
-        draw_text("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
-                  screen_height / 2 + 200)
-        # draw_text("Home", small_font, (255, 255, 255), main_screen, 90, 50)
-        # draw_text("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
+        draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text_outline("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
+                          screen_height / 2 - 40)
+        draw_text_outline("Multiply/Divide", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
+                          screen_height / 2 - 40)
+        draw_text_outline("LCD", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
+        draw_text_outline("Transform Fraction", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
+                          screen_height / 2 + 200)
+        draw_text_outline("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
+                          screen_height / 2 + 200)
+        # draw_text_outline()("Home", small_font, (255, 255, 255), main_screen, 90, 50)
+        # draw_text_outline()("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
         click = False  # resets the mouse click
 
@@ -418,12 +412,12 @@ def betting_screen():
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), bigbet_button, 0, 5)
 
-        draw_text("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                  screen_height / 2 + 100)
-        draw_text("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  screen_height / 2 + 100)
-        draw_text("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                  screen_height / 2 + 100)
+        draw_text_outline("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height / 2 + 100)
+        draw_text_outline("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height / 2 + 100)
+        draw_text_outline("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height / 2 + 100)
 
         money_UI(player)
 
@@ -499,12 +493,12 @@ def wager_screen(mode):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), wager3_button, 0, 5)
 
-        draw_text("$15", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                  screen_height / 2 + 100)
-        draw_text("$25", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  screen_height / 2 + 100)
-        draw_text("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                  screen_height / 2 + 100)
+        draw_text_outline("$15", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height / 2 + 100)
+        draw_text_outline("$25", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height / 2 + 100)
+        draw_text_outline("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height / 2 + 100)
 
         money_UI(player)
 
@@ -595,10 +589,10 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 1:
-                    results(mode, True)
+                    results(mode, True, answer)
                     # menu(click, "Fraction Distraction")
                 else:
-                    results(mode, False)
+                    results(mode, False, answer)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
 
@@ -607,9 +601,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 2:
-                    results(mode, True)
+                    results(mode, True, answer)
                 else:
-                    results(mode, False)
+                    results(mode, False, answer)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
 
@@ -618,22 +612,22 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 3:
-                    results(mode, True)
+                    results(mode, True, answer)
                 else:
-                    results(mode, False)
+                    results(mode, False, answer)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
 
         main_screen.blit(table, table_rec)
-        draw_text(f"{fraction_1} ÷ {fraction_2}",
-                  big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
+        draw_text_outline(f"{fraction_1} ÷ {fraction_2}",
+                          big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
-        draw_text("[ITEM 1]", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                  screen_height // 2 + 100)
-        draw_text("[ITEM 2]", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                  screen_height // 2 + 100)
-        draw_text("[ITEM 3]", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                  screen_height // 2 + 100)
+        draw_text_outline("[ITEM 1]", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 100)
+        draw_text_outline("[ITEM 2]", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 100)
+        draw_text_outline("[ITEM 3]", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 100)
 
         """Assigning correct answer to the correct options"""
 
@@ -656,14 +650,17 @@ def betting_game_screen(mode):
         clock.tick(60)
 
 
-def results(mode, outcome):
+def results(mode, outcome, answer):
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
-    wage = player.money_on_table
-    money_won = player.win(mode)
+    if outcome:
+        money_won = player.win(mode)
+    else:
+        wage = player.money_on_table
+        player.money_on_table = 0
 
     table = pygame.image.load("Assets/table.png")
     table = pygame.transform.scale(table, (765, 464))
@@ -683,8 +680,13 @@ def results(mode, outcome):
         universal_UI(home_button, quit_button, mx, my, click)
 
         if outcome:
-            draw_text(f"Correct!", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+            draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height / 2 + 100)
+        else:
+            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                       screen_height / 2 + 100)
+            draw_text(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                      screen_height / 2 + 150)
 
         money_UI(player)
 
@@ -729,6 +731,7 @@ def tutorials(tutorial):
 
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
         draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
+        draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
 
         click = False  # resets the mouse click
 
