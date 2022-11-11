@@ -205,7 +205,7 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (240, 20, 20), shop_button, 0, 5)
             if click:
                 button_sound.play()
-                """INSERT SHOP HERE"""
+                shop_screen()
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), shop_button, 0, 5)
 
@@ -367,7 +367,7 @@ def betting_screen():
         # Check for mouse over and mouse click on the easy button, button changes color on mouse over
         if smallbet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), smallbet_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
+            if click:
                 button_sound.play()
                 wager_screen("small")
         else:
@@ -375,7 +375,7 @@ def betting_screen():
 
         if medbet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), medbet_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
+            if click:
                 button_sound.play()
                 wager_screen("med")
         else:
@@ -383,7 +383,7 @@ def betting_screen():
 
         if bigbet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), bigbet_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
+            if click:
                 button_sound.play()
                 wager_screen("big")
         else:
@@ -719,6 +719,112 @@ def results(mode, outcome, answer, question):
                           big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
         # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def shop_screen():
+    """---------------------------------SETUP-------------------------------"""
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    # Rects for the two buttons
+    double_bet_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 - 80, 370, 80)
+    triple_bet_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 + 20, 370, 80)
+    life_line_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 + 120, 370, 80)
+    completed_tutorial_trophy = pygame.Rect(screen_width / 2 + 50, screen_height / 2 - 80, 370, 80)
+    earn_money_trophy = pygame.Rect(screen_width / 2 + 50, screen_height / 2 + 20, 370, 80)
+    bet_won_trophy = pygame.Rect(screen_width / 2 + 50, screen_height / 2 + 120, 370, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        """Items Buttons"""
+
+        if double_bet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), double_bet_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["double_bet"] += 1
+                player.total_money -= 10
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), double_bet_button, 0, 5)
+
+        if triple_bet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), triple_bet_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["triple_bet"] += 1
+                player.total_money -= 15
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), triple_bet_button, 0, 5)
+
+        if life_line_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), life_line_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["life_line"] += 1
+                player.total_money -= 30
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), life_line_button, 0, 5)
+
+        """Trophies Buttons"""
+
+        if completed_tutorial_trophy.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), completed_tutorial_trophy, 0, 5)
+            if click:
+                button_sound.play()
+                """Add Tutorial Trophy"""
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), completed_tutorial_trophy, 0, 5)
+
+        if earn_money_trophy.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), earn_money_trophy, 0, 5)
+            if click:
+                button_sound.play()
+                """Add Money Trophy"""
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), earn_money_trophy, 0, 5)
+
+        if bet_won_trophy.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), bet_won_trophy, 0, 5)
+            if click:
+                button_sound.play()
+                "Add Bet Trophy"
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), bet_won_trophy, 0, 5)
+
+        # Draws text on the menu screen
+        draw_text_outline("Distracting Shop", big_font, (255, 255, 255), main_screen, screen_width / 2,
+                          screen_height / 2 - 170)
+        draw_text_outline("Double Bet", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+                          screen_height / 2 - 40)
+        draw_text_outline("Triple Bet", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+                          screen_height / 2 + 60)
+        draw_text_outline("Life Line", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+                          screen_height / 2 + 160)
+
+        money_UI(player)
+
+        click = False  # resets the click event, prevents one click -> two actions
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
         pygame.display.update()
         clock.tick(60)
 

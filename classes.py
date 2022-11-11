@@ -4,7 +4,7 @@ class Player:
         self.bet_won = 0
         self.total_money_won = 0
         self.money_on_table = 0
-        self.items = []
+        self.items = {"double_bet": 0, "triple_bet": 0, "life_line": 0}
         self.tutorials_completed = []
 
     def bet(self, total_bet):
