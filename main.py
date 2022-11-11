@@ -25,36 +25,6 @@ big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        super().__init__()
-        self.total_money = 100  # this can be changed later
-        self.bet_won = 0
-        self.total_money_won = 0
-        self.money_on_table = 0
-        self.items = []
-        self.tutorials_completed = []
-
-    def bet(self, total_bet):
-        """deducts and sets up the betting game
-
-        :param total_bet: amount the Player wants to bet
-        :return:
-        """
-
-        self.money_on_table += total_bet
-
-    def win(self, bet_type):
-        """calculates the winnings"""
-
-        money_won = int(self.money_on_table * (0.1 if bet_type == "small"
-                                               else 0.3 if bet_type == "med" else 0.5))
-        self.total_money += money_won
-        self.total_money_won += money_won
-        self.money_on_table = 0
-
-        return money_won
-
 class Yintercept:
     def __init__(self, equation):
         self.equation = equation[0] + '+' + equation[1] + '=' + equation[2]
@@ -594,10 +564,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 1:
-                    results(mode, True, answer)
-                    # menu(click, "Fraction Distraction")
+                    results(mode, True, answer, fraction_1, fraction_2)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False, answer, fraction_1, fraction_2)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
 
@@ -606,9 +575,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 2:
-                    results(mode, True, answer)
+                    results(mode, True, answer, fraction_1, fraction_2)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False, answer, fraction_1, fraction_2)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
 
@@ -617,9 +586,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 3:
-                    results(mode, True, answer)
+                    results(mode, True, answer, fraction_1, fraction_2)
                 else:
-                    results(mode, False, answer)
+                    results(mode, False, answer, fraction_1, fraction_2)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
 
@@ -655,7 +624,7 @@ def betting_game_screen(mode):
         clock.tick(60)
 
 
-def results(mode, outcome, answer):
+def results(mode, outcome, answer, fraction_1, fraction_2):
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -665,7 +634,7 @@ def results(mode, outcome, answer):
         money_won = player.win(mode)
     else:
         wage = player.money_on_table
-        player.money_on_table = 0
+        player.lose()
 
     table = pygame.image.load("Assets/table.png")
     table = pygame.transform.scale(table, (765, 464))
@@ -688,10 +657,10 @@ def results(mode, outcome, answer):
             draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                               screen_height / 2 + 100)
         else:
-            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 100)
-            draw_text(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 150)
+            draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height / 2 + 100)
+            draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height / 2 + 150)
 
         money_UI(player)
 
@@ -706,6 +675,8 @@ def results(mode, outcome, answer):
                 click = True
 
         main_screen.blit(table, table_rec)
+        draw_text_outline(f"{fraction_1} ÷ {fraction_2}",
+                          big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
         # updates the game and tick
         pygame.display.update()
