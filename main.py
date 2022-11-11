@@ -87,21 +87,13 @@ def draw_text_outline(text, font, color, surface, x, y):
     black_color = (0, 0, 0)
 
     # Draws the black outline
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) - 2,
-              (screen_height / 2 + 100) - 2)
-
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) - 2,
-              (screen_height / 2 + 100) + 2)
-
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) + 2,
-              (screen_height / 2 + 100) - 2)
-
-    draw_text(text, big_font, black_color, main_screen, (screen_width // 2) + 2,
-              (screen_height / 2 + 100) + 2)
+    draw_text(text, font, black_color, surface, x-2, y-2)
+    draw_text(text, font, black_color, surface, x-2, y+2)
+    draw_text(text, font, black_color, surface, x+2, y-2)
+    draw_text(text, font, black_color, surface, x+2, y+2)
 
     # Draws the real text against black background text
-    draw_text(text, big_font, color, main_screen, (screen_width // 2),
-              screen_height / 2 + 100)
+    draw_text(text, font, color, surface, x, y)
 
 
 def universal_UI(home_button, quit_button, mx, my, click):
@@ -686,10 +678,10 @@ def results(mode, outcome, answer):
             draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                               screen_height / 2 + 100)
         else:
-            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 100)
-            draw_text(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                      screen_height / 2 + 150)
+            draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height / 2 + 100)
+            draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height / 2 + 150)
 
         money_UI(player)
 
