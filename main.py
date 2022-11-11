@@ -682,9 +682,9 @@ def results(mode, outcome, answer, fraction_1, fraction_2):
             draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                               screen_height / 2 + 100)
         else:
-            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+            draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                       screen_height / 2 + 100)
-            draw_text(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+            draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                       screen_height / 2 + 150)
 
         money_UI(player)
@@ -728,10 +728,8 @@ def tutorials(tutorial):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
-
-
-        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
-        draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
+        draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text_outline('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
         draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
 
         click = False  # resets the mouse click
