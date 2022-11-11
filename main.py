@@ -23,6 +23,7 @@ main_screen = pygame.display.set_mode((screen_width, screen_height))  # creates 
 # loads in the assets (background and fonts)
 start_background = pygame.image.load("Assets/start_bg.jpg")
 big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
+medium_font = pygame.font.Font("Assets/zx_spectrum.ttf", 35)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 
@@ -119,26 +120,34 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
     """
 
     if correct_option == 1:
-        draw_text_outline(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+        draw_text_outline(f"{answer}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                           screen_height // 2 + 240)  # answer 1
-        draw_text_outline(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+        draw_text_outline(f"{fake_1}", medium_font, (255, 255, 255), main_screen, (screen_width // 2),
                           screen_height // 2 + 240)  # answer 2
-        draw_text_outline(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+        draw_text_outline(f"{fake_2}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 240)  # answer 3
     elif correct_option == 2:
-        draw_text_outline(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+        draw_text_outline(f"{fake_1}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                           screen_height // 2 + 240)  # answer 1
-        draw_text_outline(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+        draw_text_outline(f"{answer}", medium_font, (255, 255, 255), main_screen, (screen_width // 2),
                           screen_height // 2 + 240)  # answer 2
-        draw_text_outline(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+        draw_text_outline(f"{fake_2}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 240)  # answer 3
     else:
-        draw_text_outline(f"{fake_1}", big_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+        draw_text_outline(f"{fake_1}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                           screen_height // 2 + 240)  # answer 1
-        draw_text_outline(f"{fake_2}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+        draw_text_outline(f"{fake_2}", medium_font, (255, 255, 255), main_screen, (screen_width // 2),
                           screen_height // 2 + 240)  # answer 2
-        draw_text_outline(f"{answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+        draw_text_outline(f"{answer}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 240)  # answer 3
+
+
+def tutorial_steps(tutorial):
+    steps = []
+    if tutorial == 'Find Y-intercept Form':
+        tut = Yintercept(['6x','7y','9'])
+        steps.append(tut.equation)
+        return steps
 
 
 def menu(click, message):
@@ -187,7 +196,6 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (240, 20, 20), quit_button, 0, 5)
             if click:
                 button_sound.play()
-                print("Quit")
                 sys.exit()
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), quit_button, 0, 5)
@@ -197,20 +205,19 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (240, 20, 20), shop_button, 0, 5)
             if click:
                 button_sound.play()
-                print("Shop")
                 """INSERT SHOP HERE"""
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), shop_button, 0, 5)
 
         # Draws text on the menu screen
         draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 170)
-        draw_text_outline("Shop", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+        draw_text_outline("Shop", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
                           screen_height / 2 - 40)
-        draw_text_outline("Betting", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+        draw_text_outline("Betting", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 - 40)
-        draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+        draw_text_outline("Quit", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
                           screen_height / 2 + 80)
-        draw_text_outline("Tutorial", small_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+        draw_text_outline("Tutorial", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 + 80)
 
         money_UI(player)
@@ -501,12 +508,51 @@ def betting_game_screen(mode):
     table_rec = table.get_rect()
     table_rec.center = (640, 200)
 
-    # Generates the fractions
-    fraction_1 = Fraction(6, 9)
-    fraction_2 = Fraction(9, 6)
-    answer = fraction_1 / fraction_2
-    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
-    fake_answer_2 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
+    if mode == "small":
+        operator = random.randint(0, 1)
+        fraction_1 = Fraction(random.randint(1, 20), random.randint(1, 20))
+        fraction_2 = Fraction(random.randint(1, 20), random.randint(1, 20))
+        if operator == 0:
+            answer = fraction_1 * fraction_2
+            answer_string = f"{fraction_1} × {fraction_2}"
+        else:
+            answer = fraction_1 / fraction_2
+            answer_string = f"{fraction_1} ÷ {fraction_2}"
+    elif mode == "med":
+        operator = random.randint(0, 3)
+        fraction_1 = Fraction(random.randint(5, 50), random.randint(5, 50))
+        fraction_2 = Fraction(random.randint(5, 50), random.randint(5, 50))
+        if operator == 0:
+            answer = fraction_1 * fraction_2
+            answer_string = f"{fraction_1} × {fraction_2}"
+        elif operator == 1:
+            answer = fraction_1 / fraction_2
+            answer_string = f"{fraction_1} ÷ {fraction_2}"
+        elif operator == 2:
+            answer = fraction_1 + fraction_2
+            answer_string = f"{fraction_1} + {fraction_2}"
+        else:
+            answer = fraction_1 - fraction_2
+            answer_string = f"{fraction_1} - {fraction_2}"
+    else:
+        operator = random.randint(0, 3)
+        fraction_1 = Fraction(random.randint(15, 99), random.randint(15, 99))
+        fraction_2 = Fraction(random.randint(15, 99), random.randint(15, 99))
+        if operator == 0:
+            answer = fraction_1 * fraction_2
+            answer_string = f"{fraction_1} × {fraction_2}"
+        elif operator == 1:
+            answer = fraction_1 / fraction_2
+            answer_string = f"{fraction_1} ÷ {fraction_2}"
+        elif operator == 2:
+            answer = fraction_1 + fraction_2
+            answer_string = f"{fraction_1} + {fraction_2}"
+        else:
+            answer = fraction_1 - fraction_2
+            answer_string = f"{fraction_1} - {fraction_2}"
+
+    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 3))
+    fake_answer_2 = answer * Fraction(random.randint(1, 3), random.randint(2, 3))
     while fake_answer_1 == fake_answer_2 or fake_answer_1 == answer or fake_answer_2 == answer:  # Validates the answers
         fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
         fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
@@ -517,9 +563,9 @@ def betting_game_screen(mode):
     item1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
     item2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
     item3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
-    ans1 = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 200, 200, 80)
-    ans2 = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 200, 200, 80)
-    ans3 = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 200, 200, 80)
+    ans1 = pygame.Rect((screen_width // 2) - 550, (screen_height // 2) + 200, 300, 80)
+    ans2 = pygame.Rect((screen_width // 2) - 150, (screen_height // 2) + 200, 300, 80)
+    ans3 = pygame.Rect((screen_width // 2) + 250, (screen_height // 2) + 200, 300, 80)
 
     """"----------------------------------LOOP-------------------------------"""
 
@@ -559,9 +605,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 1:
-                    results(mode, True, answer, fraction_1, fraction_2)
+                    results(mode, True, answer, answer_string)
                 else:
-                    results(mode, False, answer, fraction_1, fraction_2)
+                    results(mode, False, answer, answer_string)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
 
@@ -570,9 +616,9 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 2:
-                    results(mode, True, answer, fraction_1, fraction_2)
+                    results(mode, True, answer, answer_string)
                 else:
-                    results(mode, False, answer, fraction_1, fraction_2)
+                    results(mode, False, answer, answer_string)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
 
@@ -581,15 +627,14 @@ def betting_game_screen(mode):
             if click:
                 button_sound.play()
                 if correct_answer == 3:
-                    results(mode, True, answer, fraction_1, fraction_2)
+                    results(mode, True, answer, answer_string)
                 else:
-                    results(mode, False, answer, fraction_1, fraction_2)
+                    results(mode, False, answer, answer_string)
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
 
         main_screen.blit(table, table_rec)
-        draw_text_outline(f"{fraction_1} ÷ {fraction_2}",
-                          big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
+        draw_text_outline(answer_string, big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
         draw_text_outline("[ITEM 1]", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                           screen_height // 2 + 100)
@@ -619,7 +664,7 @@ def betting_game_screen(mode):
         clock.tick(60)
 
 
-def results(mode, outcome, answer, fraction_1, fraction_2):
+def results(mode, outcome, answer, question):
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -670,26 +715,12 @@ def results(mode, outcome, answer, fraction_1, fraction_2):
                 click = True
 
         main_screen.blit(table, table_rec)
-        draw_text_outline(f"{fraction_1} ÷ {fraction_2}",
+        draw_text_outline(question,
                           big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
         # updates the game and tick
         pygame.display.update()
         clock.tick(60)
-
-
-
-
-
-def tutorial_steps(tutorial):
-    steps = []
-    if tutorial == 'Find Y-intercept Form':
-        tut = Yintercept(['6x','7y','9'])
-        steps.append(tut.equation)
-        return steps
-
-
-
 
 
 def tutorials(tutorial):
@@ -723,13 +754,11 @@ def tutorials(tutorial):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
-
         if len(clicks) == 1:
             print('yes')
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
         draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
-
 
         click = False  # resets the mouse click
 
