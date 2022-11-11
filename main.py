@@ -633,8 +633,11 @@ def results(mode, outcome):
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
-    wage = player.money_on_table
-    money_won = player.win(mode)
+    if outcome:
+        money_won = player.win(mode)
+    else:
+        wage = player.money_on_table
+        player.money_on_table = 0
 
     table = pygame.image.load("Assets/table.png")
     table = pygame.transform.scale(table, (765, 464))
@@ -654,7 +657,10 @@ def results(mode, outcome):
         universal_UI(home_button, quit_button, mx, my, click)
 
         if outcome:
-            draw_text(f"Correct!", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+            draw_text(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                      screen_height / 2 + 100)
+        else:
+            draw_text(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                       screen_height / 2 + 100)
 
         money_UI(player)
