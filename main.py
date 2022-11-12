@@ -563,24 +563,25 @@ def betting_game_screen(mode):
             answer = fraction_1 - fraction_2
             answer_string = f"{fraction_1} - {fraction_2}"
     else:
-        operator = random.randint(0, 3)
+        operator = random.randint(0, 9)
         fraction_1 = Fraction(random.randint(15, 99), random.randint(15, 99))
         fraction_2 = Fraction(random.randint(15, 99), random.randint(15, 99))
         if operator == 0:
             answer = fraction_1 * fraction_2
             answer_string = f"{fraction_1} × {fraction_2}"
-        elif operator == 1:
+        elif operator == 1 or operator == 2:
             answer = fraction_1 / fraction_2
             answer_string = f"{fraction_1} ÷ {fraction_2}"
-        elif operator == 2:
+        elif operator == 3 or operator == 4 or operator == 5:
             answer = fraction_1 + fraction_2
             answer_string = f"{fraction_1} + {fraction_2}"
         else:
             answer = fraction_1 - fraction_2
             answer_string = f"{fraction_1} - {fraction_2}"
 
-    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 3))
-    fake_answer_2 = answer * Fraction(random.randint(1, 3), random.randint(2, 3))
+    """TOO EASY TO FIND THE INCORRECT ANSWER. MAKE IT SO THAT THE LAST DIGIT OF THE DENOM IS THE SAME AS THE ANSWER"""
+    fake_answer_1 = answer * Fraction(random.randint(1, 4), random.randint(3, 9))
+    fake_answer_2 = answer * Fraction(random.randint(1, 4), random.randint(3, 9))
     while fake_answer_1 == fake_answer_2 or fake_answer_1 == answer or fake_answer_2 == answer:  # Validates the answers
         fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
         fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
@@ -647,7 +648,7 @@ def betting_game_screen(mode):
 
         if player.items["life_line"] == 0:
             pygame.draw.rect(main_screen, (97, 12, 3), item3_button, 0, 5)
-            if click and pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5):
+            if click and item3_button.collidepoint((mx, my)):
                 error_sound.play()
         elif item3_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5)
