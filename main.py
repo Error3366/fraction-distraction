@@ -12,6 +12,7 @@ pygame.display.set_caption("Fraction Distraction")
 
 # initializes game sound effects
 button_sound = pygame.mixer.Sound("Assets/button.mp3")
+error_sound = pygame.mixer.Sound("Assets/ball.mp3")
 
 # basic global values
 screen_width = 1280
@@ -758,9 +759,12 @@ def shop_screen():
         if double_bet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), double_bet_button, 0, 5)
             if click:
-                button_sound.play()
-                player.items["double_bet"] += 1
-                player.total_money -= 10
+                if player.total_money < 10:
+                    error_sound.play()
+                else:
+                    player.items["double_bet"] += 1
+                    player.total_money -= 10
+                    button_sound.play()
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), double_bet_button, 0, 5)
 
