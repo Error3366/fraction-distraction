@@ -595,6 +595,10 @@ def betting_game_screen(mode):
     ans2 = pygame.Rect((screen_width // 2) - 150, (screen_height // 2) + 200, 300, 80)
     ans3 = pygame.Rect((screen_width // 2) + 250, (screen_height // 2) + 200, 300, 80)
 
+    # Item booleans
+    double_active = False
+    triple_active = False
+
     """"----------------------------------LOOP-------------------------------"""
 
     while True:  # screen loop
@@ -605,24 +609,53 @@ def betting_game_screen(mode):
         """Item Buttons"""
 
         # Check for mouse over and mouse click on the easy button, button changes color on mouse over
-        if item1_button.collidepoint((mx, my)):
+        if double_active:
+            pygame.draw.rect(main_screen, (8, 82, 3), item1_button, 0, 5)
+            if click and item1_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif player.items["double_bet"] == 0:
+            pygame.draw.rect(main_screen, (97, 12, 3), item1_button, 0, 5)
+            if click and item1_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif item1_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), item1_button, 0, 5)
             if click:
                 button_sound.play()
+                player.items["double_bet"] -= 1
+                player.money_on_table *= 2
+                double_active = True
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), item1_button, 0, 5)
 
-        if item2_button.collidepoint((mx, my)):
+        if triple_active:
+            pygame.draw.rect(main_screen, (8, 82, 3), item2_button, 0, 5)
+            if click and item2_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif player.items["triple_bet"] == 0:
+            pygame.draw.rect(main_screen, (97, 12, 3), item2_button, 0, 5)
+            if click and item2_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif item2_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), item2_button, 0, 5)
             if click:
                 button_sound.play()
+                player.items["triple_bet"] -= 1
+                player.money_on_table *= 3
+                triple_active = True
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), item2_button, 0, 5)
 
-        if item3_button.collidepoint((mx, my)):
+        if player.items["life_line"] == 0:
+            pygame.draw.rect(main_screen, (97, 12, 3), item3_button, 0, 5)
+            if click and pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5):
+                error_sound.play()
+        elif item3_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5)
             if click:
                 button_sound.play()
+                player.items["life_line"] -= 1
+                player.money_on_table = 0
+                betting_screen()
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), item3_button, 0, 5)
 
@@ -664,11 +697,11 @@ def betting_game_screen(mode):
         main_screen.blit(table, table_rec)
         draw_text_outline(answer_string, big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
 
-        draw_text_outline("[ITEM 1]", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+        draw_text_outline("X2 Wager", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
                           screen_height // 2 + 100)
-        draw_text_outline("[ITEM 2]", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+        draw_text_outline("X3 Wager", small_font, (255, 255, 255), main_screen, (screen_width // 2),
                           screen_height // 2 + 100)
-        draw_text_outline("[ITEM 3]", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+        draw_text_outline("Life Line", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 100)
 
         """Assigning answer to the corresponding options"""
@@ -780,39 +813,42 @@ def shop_screen():
 
         """Items Buttons"""
 
-        if double_bet_button.collidepoint((mx, my)):
+        if player.total_money < 20:
+            pygame.draw.rect(main_screen, (97, 12, 3), double_bet_button, 0, 5)
+            if click and double_bet_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif double_bet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), double_bet_button, 0, 5)
             if click:
-                if player.total_money < 10:
-                    error_sound.play()
-                else:
-                    button_sound.play()
-                    player.items["double_bet"] += 1
-                    player.total_money -= 10
+                button_sound.play()
+                player.items["double_bet"] += 1
+                player.total_money -= 20
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), double_bet_button, 0, 5)
 
-        if triple_bet_button.collidepoint((mx, my)):
+        if player.total_money < 35:
+            pygame.draw.rect(main_screen, (97, 12, 3), triple_bet_button, 0, 5)
+            if click and triple_bet_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif triple_bet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), triple_bet_button, 0, 5)
             if click:
-                if player.total_money < 15:
-                    error_sound.play()
-                else:
-                    button_sound.play()
-                    player.items["triple_bet"] += 1
-                    player.total_money -= 15
+                button_sound.play()
+                player.items["triple_bet"] += 1
+                player.total_money -= 35
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), triple_bet_button, 0, 5)
 
-        if life_line_button.collidepoint((mx, my)):
+        if player.total_money < 30:
+            pygame.draw.rect(main_screen, (97, 12, 3), life_line_button, 0, 5)
+            if click and life_line_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif life_line_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), life_line_button, 0, 5)
             if click:
-                if player.total_money < 15:
-                    error_sound.play()
-                else:
-                    button_sound.play()
-                    player.items["life_line"] += 1
-                    player.total_money -= 30
+                button_sound.play()
+                player.items["life_line"] += 1
+                player.total_money -= 30
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), life_line_button, 0, 5)
 
@@ -845,12 +881,12 @@ def shop_screen():
         # Draws text on the menu screen
         draw_text_outline("Distracting Shop", big_font, (255, 255, 255), main_screen, screen_width / 2,
                           screen_height / 2 - 170)
-        draw_text_outline("Double Bet", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+        draw_text_outline("X2 Bet-$20", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 - 40)
-        draw_text_outline("Triple Bet", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
+        draw_text_outline("X3 Bet-$35", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 + 60)
-        draw_text_outline("Life Line", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
-                          screen_height / 2 + 160)
+        draw_text_outline("Life Line-$30", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 234,
+                          screen_height / 2 + 160)  # shifts it a little to the left to make it fit the rect
         draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
                           screen_height / 2 - 40)
         draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
