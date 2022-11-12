@@ -104,7 +104,7 @@ def money_UI(player_info):
     money = pygame.image.load("Assets/money.png")
     money = pygame.transform.scale(money, (89, 80))
     money_rect = money.get_rect()
-    money_rect.center = (1240, 675)
+    money_rect.center = (1250, 675)
 
     main_screen.blit(money, money_rect)
     draw_text_outline(f"${player_info.total_money}", medium_font, (255, 255, 255), main_screen, 1160, 680)
