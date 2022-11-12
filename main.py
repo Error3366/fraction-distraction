@@ -739,6 +739,11 @@ def shop_screen():
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
+    heart = pygame.image.load("Assets/heart.png")
+    heart = pygame.transform.scale(heart, (54, 45))
+    heart_rect = heart.get_rect()
+    heart_rect.center = (screen_width / 2 + 300, 680)
+
     """"----------------------------------LOOP-------------------------------"""
 
     while True:
@@ -823,8 +828,9 @@ def shop_screen():
                           screen_width / 2 - 300, 680)
         draw_text_outline(f"X3: {player.items['triple_bet']}", medium_font, (255, 255, 255), main_screen,
                           screen_width / 2, 680)
-        draw_text_outline(f"Life_Line: {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
-                          screen_width / 2 + 300, 680)
+        main_screen.blit(heart, heart_rect)
+        draw_text_outline(f": {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
+                          screen_width / 2 + 360, 680)
 
         money_UI(player)
 
