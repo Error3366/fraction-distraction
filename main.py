@@ -3,6 +3,7 @@ import pygame
 import sys
 from fractions import Fraction
 import random
+import time
 
 # initializes the game and pygame fonts
 pygame.init()
@@ -12,18 +13,30 @@ pygame.display.set_caption("Fraction Distraction")
 
 # initializes game sound effects
 button_sound = pygame.mixer.Sound("Assets/button.mp3")
-error_sound = pygame.mixer.Sound("Assets/ball.mp3")
+error_sound = pygame.mixer.Sound("Assets/error.mp3")
 
 # basic global values
 screen_width = 1280
 screen_height = 720
 mouse_click = False
 
-main_screen = pygame.display.set_mode((screen_width, screen_height))  # creates the main screen of the game
+# creates the main screen of the game
+main_screen = pygame.display.set_mode((screen_width, screen_height))
 
-# loads in the assets (background and fonts)
+# loads in the assets (background, fonts, and assets)
 start_background = pygame.image.load("Assets/start_bg.jpg")
 big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
+
+money = pygame.image.load("Assets/money.png")
+money = pygame.transform.scale(money, (89, 80))
+money_rect = money.get_rect()
+money_rect.center = (1250, 675)
+
+heart = pygame.image.load("Assets/heart.png")
+heart = pygame.transform.scale(heart, (54, 45))
+heart_rect = heart.get_rect()
+heart_rect.center = (screen_width / 2 + 300, 680)
+
 medium_font = pygame.font.Font("Assets/zx_spectrum.ttf", 35)
 small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
@@ -101,14 +114,23 @@ def universal_UI(home_button, quit_button, mx, my, click):
     draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
 
-def money_UI(player_info):
-    money = pygame.image.load("Assets/money.png")
-    money = pygame.transform.scale(money, (89, 80))
-    money_rect = money.get_rect()
-    money_rect.center = (1250, 675)
+def money_UI():
+    """ creates the UI for the total money the player has"""
 
     main_screen.blit(money, money_rect)
-    draw_text_outline(f"${player_info.total_money}", medium_font, (255, 255, 255), main_screen, 1160, 680)
+    draw_text_outline(f"${player.total_money}", medium_font, (255, 255, 255), main_screen, 1160, 680)
+
+
+def item_UI():
+    """ creates the UI for the amount of items the player has"""
+
+    draw_text_outline(f"X2: {player.items['double_bet']}", medium_font, (255, 255, 255), main_screen,
+                      screen_width / 2 - 300, 680)
+    draw_text_outline(f"X3: {player.items['triple_bet']}", medium_font, (255, 255, 255), main_screen,
+                      screen_width / 2, 680)
+    main_screen.blit(heart, heart_rect)
+    draw_text_outline(f": {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
+                      screen_width / 2 + 360, 680)
 
 
 def answer_choice_text(correct_option, answer, fake_1, fake_2):
@@ -146,7 +168,7 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
 def tutorial_steps(tutorial):
     steps = []
     if tutorial == 'Find Y-intercept Form':
-        tut = Yintercept(['6x','7y','9'])
+        tut = Yintercept(['6x', '7y', '9'])
         steps.append(tut.equation)
         return steps
 
@@ -221,7 +243,8 @@ def menu(click, message):
         draw_text_outline("Tutorial", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 + 80)
 
-        money_UI(player)
+        item_UI()
+        money_UI()
 
         click = False  # resets the click event, prevents one click -> two actions
 
@@ -324,6 +347,8 @@ def tutorial_select(message):
         # draw_text_outline()("Home", small_font, (255, 255, 255), main_screen, 90, 50)
         # draw_text_outline()("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
+        money_UI()
+
         click = False  # resets the mouse click
 
         # checks for game events
@@ -397,7 +422,8 @@ def betting_screen():
         draw_text_outline("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height / 2 + 100)
 
-        money_UI(player)
+        item_UI()
+        money_UI()
 
         click = False  # resets the mouse click
 
@@ -478,7 +504,8 @@ def wager_screen(mode):
         draw_text_outline("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height / 2 + 100)
 
-        money_UI(player)
+        item_UI()
+        money_UI()
 
         click = False  # resets the mouse click
 
@@ -644,17 +671,19 @@ def betting_game_screen(mode):
         draw_text_outline("[ITEM 3]", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 100)
 
-        """Assigning correct answer to the correct options"""
+        """Assigning answer to the corresponding options"""
 
         answer_choice_text(correct_answer, answer, fake_answer_1, fake_answer_2)
 
-        money_UI(player)
+        item_UI()
+        money_UI()
 
         click = False  # resets the mouse click
 
         # Checks for game events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                player.lose()
                 quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
@@ -703,7 +732,7 @@ def results(mode, outcome, answer, question):
             draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
                               screen_height / 2 + 150)
 
-        money_UI(player)
+        money_UI()
 
         click = False  # resets the mouse click
 
@@ -740,11 +769,6 @@ def shop_screen():
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
-    heart = pygame.image.load("Assets/heart.png")
-    heart = pygame.transform.scale(heart, (54, 45))
-    heart_rect = heart.get_rect()
-    heart_rect.center = (screen_width / 2 + 300, 680)
-
     """"----------------------------------LOOP-------------------------------"""
 
     while True:
@@ -762,27 +786,33 @@ def shop_screen():
                 if player.total_money < 10:
                     error_sound.play()
                 else:
+                    button_sound.play()
                     player.items["double_bet"] += 1
                     player.total_money -= 10
-                    button_sound.play()
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), double_bet_button, 0, 5)
 
         if triple_bet_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), triple_bet_button, 0, 5)
             if click:
-                button_sound.play()
-                player.items["triple_bet"] += 1
-                player.total_money -= 15
+                if player.total_money < 15:
+                    error_sound.play()
+                else:
+                    button_sound.play()
+                    player.items["triple_bet"] += 1
+                    player.total_money -= 15
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), triple_bet_button, 0, 5)
 
         if life_line_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), life_line_button, 0, 5)
             if click:
-                button_sound.play()
-                player.items["life_line"] += 1
-                player.total_money -= 30
+                if player.total_money < 15:
+                    error_sound.play()
+                else:
+                    button_sound.play()
+                    player.items["life_line"] += 1
+                    player.total_money -= 30
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), life_line_button, 0, 5)
 
@@ -828,15 +858,8 @@ def shop_screen():
         draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
                           screen_height / 2 + 160)
 
-        draw_text_outline(f"X2: {player.items['double_bet']}", medium_font, (255, 255, 255), main_screen,
-                          screen_width / 2 - 300, 680)
-        draw_text_outline(f"X3: {player.items['triple_bet']}", medium_font, (255, 255, 255), main_screen,
-                          screen_width / 2, 680)
-        main_screen.blit(heart, heart_rect)
-        draw_text_outline(f": {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
-                          screen_width / 2 + 360, 680)
-
-        money_UI(player)
+        item_UI()
+        money_UI()
 
         click = False  # resets the click event, prevents one click -> two actions
 
@@ -887,7 +910,7 @@ def tutorials(tutorial):
             print('yes')
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
-        draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
+        draw_text('Next', small_font, (255, 255, 255), main_screen, screen_width//2, 650)
 
         click = False  # resets the mouse click
 
