@@ -23,6 +23,7 @@ class Player:
                                                else 0.3 if bet_type == "med" else 0.5))
         self.total_money += money_won
         self.total_money_won += money_won
+        self.bet_won += 1
         self.money_on_table = 0
 
         return money_won

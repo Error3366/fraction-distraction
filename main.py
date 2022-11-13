@@ -234,7 +234,7 @@ def menu(click, message):
 
         # Draws text on the menu screen
         draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 170)
-        draw_text_outline("Shop", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+        draw_text_outline("Shop/Stats", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
                           screen_height / 2 - 40)
         draw_text_outline("Betting", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
                           screen_height / 2 - 40)
@@ -312,7 +312,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find Least Common Demoniator')
+                tutorials('Find Least Common Denominator')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
@@ -803,6 +803,11 @@ def shop_screen():
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
+    # Trophy booleans
+    tutorial_active = False
+    money_active = False
+    bet_active = False
+
     """"----------------------------------LOOP-------------------------------"""
 
     while True:
@@ -859,7 +864,7 @@ def shop_screen():
             pygame.draw.rect(main_screen, (240, 20, 20), completed_tutorial_trophy, 0, 5)
             if click:
                 button_sound.play()
-                """Add Tutorial Trophy"""
+                tutorial_active = not tutorial_active
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), completed_tutorial_trophy, 0, 5)
 
@@ -867,7 +872,7 @@ def shop_screen():
             pygame.draw.rect(main_screen, (240, 20, 20), earn_money_trophy, 0, 5)
             if click:
                 button_sound.play()
-                """Add Money Trophy"""
+                money_active = not money_active
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), earn_money_trophy, 0, 5)
 
@@ -875,7 +880,7 @@ def shop_screen():
             pygame.draw.rect(main_screen, (240, 20, 20), bet_won_trophy, 0, 5)
             if click:
                 button_sound.play()
-                "Add Bet Trophy"
+                bet_active = not bet_active
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), bet_won_trophy, 0, 5)
 
@@ -888,12 +893,27 @@ def shop_screen():
                           screen_height / 2 + 60)
         draw_text_outline("Life Line-$30", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 234,
                           screen_height / 2 + 160)  # shifts it a little to the left to make it fit the rect
-        draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                          screen_height / 2 - 40)
-        draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                          screen_height / 2 + 60)
-        draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                          screen_height / 2 + 160)
+
+        if tutorial_active:
+            draw_text_outline(f"PLACE HOLDER", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                              screen_height / 2 - 40)
+        else:
+            draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                              screen_height / 2 - 40)
+
+        if money_active:
+            draw_text_outline(f"${player.total_money_won} Won!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                              screen_height / 2 + 60)
+        else:
+            draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                              screen_height / 2 + 60)
+
+        if bet_active:
+            draw_text_outline(f"{player.bet_won} Bets Won!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                              screen_height / 2 + 160)
+        else:
+            draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
+                              screen_height / 2 + 160)
 
         item_UI()
         money_UI()
