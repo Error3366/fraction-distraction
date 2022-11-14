@@ -811,7 +811,7 @@ def tutorial_steps(tutorial):
     if tutorial == 'Find Y-intercept Form':
         tut = Yintercept(['6x','7y','9'])
         steps = tut.steps
-        return steps
+    return steps
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -972,6 +972,9 @@ def tutorials(tutorial):
             for index in range(1, clicks+1):
                 height = (index - 1) * 50
                 draw_text(steps[index], small_font,(255,255,255), main_screen, screen_width // 2, 150 + height)
+
+        if clicks == len(steps):
+            clicks = 0
 
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
