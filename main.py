@@ -177,7 +177,6 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (240, 20, 20), tutorial_button, 0, 5)
             if click:
                 button_sound.play()
-                print("Tutorial Screen")
                 tutorial_select("Select Tutorial")
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), tutorial_button, 0, 5)
@@ -682,10 +681,9 @@ def results(mode, outcome, answer, fraction_1, fraction_2):
 
 
 def tutorial_steps(tutorial):
-    steps = []
     if tutorial == 'Find Y-intercept Form':
         tut = Yintercept(['6x','7y','9'])
-        steps.append(tut.equation)
+        steps = tut.steps
         return steps
 
 
@@ -703,7 +701,9 @@ def tutorials(tutorial):
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
-    clicks = []
+    clicks = 0
+
+
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -716,16 +716,19 @@ def tutorials(tutorial):
             pygame.draw.rect(main_screen, (240, 20, 20), next_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find Y-intercept Form')
-                clicks.append(1)
-                print(len(clicks))
+                clicks += 1
+
+
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
 
-        if len(clicks) == 1:
-            print('yes')
+        if clicks >= 1 and clicks < len(steps):
+            for index in range(1, clicks+1):
+                height = (index - 1) * 50
+                draw_text(steps[index], small_font,(255,255,255), main_screen, screen_width // 2, 150 + height)
+
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
         draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
