@@ -962,8 +962,6 @@ def tutorials(tutorial):
                 button_sound.play()
                 clicks += 1
 
-
-
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
