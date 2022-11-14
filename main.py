@@ -26,6 +26,8 @@ main_screen = pygame.display.set_mode((screen_width, screen_height))
 # loads in the assets (background, fonts, and assets)
 start_background = pygame.image.load("Assets/start_bg.jpg")
 big_font = pygame.font.Font("Assets/zx_spectrum.ttf", 50)
+medium_font = pygame.font.Font("Assets/zx_spectrum.ttf", 35)
+small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 money = pygame.image.load("Assets/money.png")
 money = pygame.transform.scale(money, (89, 80))
@@ -36,9 +38,6 @@ heart = pygame.image.load("Assets/heart.png")
 heart = pygame.transform.scale(heart, (54, 45))
 heart_rect = heart.get_rect()
 heart_rect.center = (screen_width / 2 + 300, 680)
-
-medium_font = pygame.font.Font("Assets/zx_spectrum.ttf", 35)
-small_font = pygame.font.Font("Assets/zx_spectrum.ttf", 25)
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -807,15 +806,10 @@ def shop_screen():
     money_active = False
     bet_active = False
 
-def tutorial_steps(tutorial):
-    if tutorial == 'Find Y-intercept Form':
-        tut = Yintercept(['6x','7y','9'])
-        steps = tut.steps
-    return steps
-
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
         universal_UI(home_button, quit_button, mx, my, click)
 
@@ -934,6 +928,13 @@ def tutorial_steps(tutorial):
         clock.tick(60)
 
 
+def tutorial_steps(tutorial):
+    if tutorial == 'Find Y-intercept Form':
+        tut = Yintercept(['6x','7y','9'])
+        steps = tut.steps
+    return steps
+
+
 def tutorials(tutorial):
     steps = tutorial_steps(tutorial)
     equation = steps[0]
@@ -946,8 +947,6 @@ def tutorials(tutorial):
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
     clicks = 0
-
-
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -965,7 +964,6 @@ def tutorials(tutorial):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
-
         if clicks >= 1 and clicks < len(steps):
             for index in range(1, clicks+1):
                 height = (index - 1) * 50
@@ -977,7 +975,6 @@ def tutorials(tutorial):
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
         draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
-
 
         click = False  # resets the mouse click
 
