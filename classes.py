@@ -67,7 +67,7 @@ class Add:
     def __init__(self):
         self.equation = f'4/7 + 8/5'
         # lcd step and multiply by 1 to get common denominator
-        self.step1 = f'(5/5 x 4/7) + (7/7 x 8/5)'
+        self.step1 = f'(5/5 × 4/7) + (7/7 × 8/5)'
         self.step2 = f'20/35 + 56/35'
         self.step3 = f'76/35'
         self.step4 = f'DONE'
@@ -76,10 +76,10 @@ class Add:
 
 class Divide:
     def __init__(self):
-        self.equation = f'(4/7) / (8/5)'
+        self.equation = f'(4/7) ÷  (8/5)'
         self.step1 = f'Multiply 4/7 by reciprocal of 8/5'
-        self.step2 = f'4/7 x 5/8'
-        self.step3 = f'(4 x 5) / (7 x 8)'
+        self.step2 = f'4/7 × 5/8'
+        self.step3 = f'(4 × 5) / (7 × 8)'
         self.step4 = f'20/56'
         self.step5 = f'DONE'
         self.steps = [self.equation, self.step1, self.step2, self.step3, self.step4, self.step5]
@@ -87,8 +87,8 @@ class Divide:
 
 class Multiply:
     def __init__(self):
-        self.equation = f' 7/9 x 2/3'
-        self.step1 = f'(7 x 2) / (9 x 3)'
+        self.equation = f' 7/9 × 2/3'
+        self.step1 = f'(7 × 2) / (9 × 3)'
         self.step2 = f'14/27'
         self.step3 = 'DONE'
         self.steps = [self.equation, self.step1, self.step2, self.step3]
@@ -99,9 +99,24 @@ class LCD:
     def __init__(self):
         self.equation = f'Find Least Common Denominator of 2/9 and 7/6'
         self.step1 = f'Factorize 9 and 6'
-        self.step2 = f'9 = 3 x 3  and 6 = 3 x 2'
+        self.step2 = f'9 = 3 × 3  and 6 = 3 × 2'
         #need step in between here to explain next step of finding lcd
-        self.step3 = f'LCD = 3 x 3 x 2'
+        self.step3 = f'LCD = 3 × 3 × 2'
         self.step4 = f'LCD = 18'
         self.step5 = 'DONE'
         self.steps = [self.equation, self.step1, self.step2, self.step3, self.step4, self.step5]
+
+
+class Subtract:
+
+    def __init__(self):
+        self.equation = f'3/7 - 5/14'
+        self.step1 = f'LCD = 14'
+        self.step2 = f' (2/2 × 3/7) - (1/1 × 5/14)'
+        self.step3 = f'6/14 - 5/14'
+        self.step4 = f'(6-5)/14'
+        self.step5 = f'1/14'
+        self.step6 = 'DONE'
+        self.steps = [self.equation, self.step1, self.step2,self.step3,self.step4,self.step5,self.step6]
+
+

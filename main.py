@@ -1,4 +1,4 @@
-from classes import Player, Yintercept, Transform, Add, Divide, LCD
+from classes import Player, Yintercept, Transform, Add, Divide, LCD, Subtract
 import pygame
 import sys
 from fractions import Fraction
@@ -285,7 +285,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Adding Fractions')
+                special_tutorials(['Add','Subtract'])
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
@@ -294,7 +294,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Dividing Fractions')
+                special_tutorials(['Multiply','Divide'])
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
@@ -304,7 +304,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), lcd_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Find Least Common Denominator')
+                tutorials('Find LCD')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), lcd_button, 0, 5)
 
@@ -932,7 +932,7 @@ def tutorial_steps(tutorial):
         steps = tut.steps
 
     if tutorial == 'Adding Fractions':
-        tut = Add()
+        tut = Subtract()
         steps = tut.steps
 
     if tutorial == 'Dividing Fractions':
@@ -975,17 +975,24 @@ def tutorials(tutorial):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
+
         if clicks >= 1 and clicks < len(steps):
             for index in range(1, clicks+1):
                 height = (index - 1) * 50
-                draw_text(steps[index], small_font,(255,255,255), main_screen, screen_width // 2, 150 + height)
+                draw_text_outline(steps[index], medium_font,(255,255,255), main_screen, screen_width // 2, 150 + height)
 
         if clicks == len(steps):
             clicks = 0
 
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
-        draw_text(equation, small_font, (255, 255, 255), main_screen, screen_width // 2, 100)
-        draw_text('Next', small_font, (255,255,255), main_screen, screen_width//2, 650)
+        draw_text_outline(equation, medium_font, (255, 255, 255), main_screen, screen_width // 2, 100)
+        if clicks == 0:
+            draw_text_outline('Start', medium_font, (255,255,255), main_screen, screen_width//2, 650)
+        elif clicks == len(steps) - 1:
+            draw_text_outline('Again', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
+        else:
+            draw_text_outline('Next', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
+
 
         click = False  # resets the mouse click
 
@@ -1000,6 +1007,52 @@ def tutorials(tutorial):
         # updates the game and tick
         pygame.display.update()
         clock.tick(60)
+
+
+def special_tutorials(tutorials):
+    # for addition/subtraction tutorial or multiplication/division tutorial
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+
+
+    option1_button = pygame.Rect((screen_width // 4) - 185, screen_height/2, 370, 100)
+    option2_button = pygame.Rect((screen_width // 2) - 100, 600, 200, 100)
+
+
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    while True:
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+
+        if option1_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), option1_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+
+
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), option1_button, 0, 5)
+
+        click = False
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
 
 
 if __name__ == "__main__":
