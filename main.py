@@ -132,6 +132,38 @@ def item_UI():
                       screen_width / 2 + 360, 680)
 
 
+def num_n_denom(fraction_1, fraction_2):
+    """
+
+    :param fraction_1:
+    :param fraction_2:
+    :return:
+    """
+
+    numer1_factors = []
+    denom1_factors = []
+    numer2_factors = []
+    denom2_factors = []
+
+    for i in range(2, fraction_1.numerator + 1):
+        if fraction_1.numerator % i == 0:
+            numer1_factors.append(i)
+
+    for i in range(2, fraction_1.denominator + 1):
+        if fraction_1.denominator % i == 0:
+            denom1_factors.append(i)
+
+    for i in range(2, fraction_2.numerator + 1):
+        if fraction_2.denominator % i == 0:
+            numer2_factors.append(i)
+
+    for i in range(2, fraction_2.denominator + 1):
+        if fraction_2.denominator % i == 0:
+            denom2_factors.append(i)
+
+    return numer1_factors, denom1_factors, numer2_factors, denom2_factors
+
+
 def answer_choice_text(correct_option, answer, fake_1, fake_2):
     """generates the random answer choices
 
@@ -162,8 +194,6 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
                           screen_height // 2 + 240)  # answer 2
         draw_text_outline(f"{answer}", medium_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 240)  # answer 3
-
-
 
 
 def menu(click, message):
@@ -428,6 +458,9 @@ def betting_screen():
                 click = True
 
         main_screen.blit(table, table_rec)
+        draw_text_outline("Bet Difficulty!", big_font, (255, 255, 255), main_screen, 645, 200)
+        draw_text_outline("Hard Bet:", medium_font, (255, 255, 255), main_screen, 645, 250)
+        draw_text_outline("Greater Rewards", medium_font, (255, 255, 255), main_screen, 645, 285)
 
         # updates the game and tick
         pygame.display.update()
@@ -462,7 +495,11 @@ def wager_screen(mode):
         universal_UI(home_button, quit_button, mx, my, click)
 
         # Check for mouse over and mouse click on the easy button, button changes color on mouse over
-        if wager1_button.collidepoint((mx, my)):
+        if player.total_money < 15:
+            pygame.draw.rect(main_screen, (97, 12, 3), wager1_button, 0, 5)
+            if click and wager1_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif wager1_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), wager1_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
@@ -471,7 +508,11 @@ def wager_screen(mode):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), wager1_button, 0, 5)
 
-        if wager2_button.collidepoint((mx, my)):
+        if player.total_money < 25:
+            pygame.draw.rect(main_screen, (97, 12, 3), wager2_button, 0, 5)
+            if click and wager2_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif wager2_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), wager2_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
@@ -480,7 +521,11 @@ def wager_screen(mode):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), wager2_button, 0, 5)
 
-        if wager3_button.collidepoint((mx, my)):
+        if player.total_money < 50:
+            pygame.draw.rect(main_screen, (97, 12, 3), wager3_button, 0, 5)
+            if click and wager3_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif wager3_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), wager3_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
@@ -490,11 +535,12 @@ def wager_screen(mode):
             pygame.draw.rect(main_screen, (196, 16, 16), wager3_button, 0, 5)
 
         draw_text_outline("$15", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                          screen_height / 2 + 100)
+                          screen_height // 2 + 100)
         draw_text_outline("$25", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                          screen_height / 2 + 100)
+                          screen_height // 2 + 100)
         draw_text_outline("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                          screen_height / 2 + 100)
+                          screen_height // 2 + 100)
+
 
         item_UI()
         money_UI()
@@ -510,6 +556,7 @@ def wager_screen(mode):
                 click = True
 
         main_screen.blit(table, table_rec)
+        draw_text_outline("Select Wager!", big_font, (255, 255, 255), main_screen, 640, 200)
 
         # updates the game and tick
         pygame.display.update()
@@ -530,50 +577,67 @@ def betting_game_screen(mode):
 
     if mode == "small":
         operator = random.randint(0, 1)
-        fraction_1 = Fraction(random.randint(1, 20), random.randint(1, 20))
-        fraction_2 = Fraction(random.randint(1, 20), random.randint(1, 20))
+        common_factor = random.randint(2, 12)
+
         if operator == 0:
+            fraction_1 = Fraction(common_factor * random.randint(1, 4), random.randint(1, 41))
+            fraction_2 = Fraction(random.randint(1, 27), common_factor * random.randint(1, 3))
             answer = fraction_1 * fraction_2
             answer_string = f"{fraction_1} × {fraction_2}"
         else:
+            fraction_1 = Fraction(common_factor * random.randint(1, 4), random.randint(1, 41))
+            fraction_2 = Fraction(common_factor * random.randint(1, 3), random.randint(1, 27))
             answer = fraction_1 / fraction_2
             answer_string = f"{fraction_1} ÷ {fraction_2}"
     elif mode == "med":
         operator = random.randint(0, 3)
-        fraction_1 = Fraction(random.randint(5, 50), random.randint(5, 50))
-        fraction_2 = Fraction(random.randint(5, 50), random.randint(5, 50))
+        common_factor = random.randint(12, 24)
         if operator == 0:
+            fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
+            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
             answer = fraction_1 * fraction_2
             answer_string = f"{fraction_1} × {fraction_2}"
         elif operator == 1:
+            fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
+            fraction_2 = Fraction(common_factor * random.randint(2, 4), random.randint(5, 50))
             answer = fraction_1 / fraction_2
             answer_string = f"{fraction_1} ÷ {fraction_2}"
         elif operator == 2:
+            fraction_1 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 5))
+            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
             answer = fraction_1 + fraction_2
             answer_string = f"{fraction_1} + {fraction_2}"
         else:
+            fraction_1 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 5))
+            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
             answer = fraction_1 - fraction_2
             answer_string = f"{fraction_1} - {fraction_2}"
     else:
         operator = random.randint(0, 9)
-        fraction_1 = Fraction(random.randint(15, 99), random.randint(15, 99))
-        fraction_2 = Fraction(random.randint(15, 99), random.randint(15, 99))
+        common_factor = random.randint(14, 31)
         if operator == 0:
+            fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(2, 4))
             answer = fraction_1 * fraction_2
             answer_string = f"{fraction_1} × {fraction_2}"
         elif operator == 1 or operator == 2:
+            fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
+            fraction_2 = Fraction(common_factor * random.randint(2, 4), random.randint(15, 99))
             answer = fraction_1 / fraction_2
             answer_string = f"{fraction_1} ÷ {fraction_2}"
         elif operator == 3 or operator == 4 or operator == 5:
+            fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(2, 4))
             answer = fraction_1 + fraction_2
             answer_string = f"{fraction_1} + {fraction_2}"
         else:
+            fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(2, 4))
             answer = fraction_1 - fraction_2
             answer_string = f"{fraction_1} - {fraction_2}"
 
-    """TOO EASY TO FIND THE INCORRECT ANSWER. MAKE IT SO THAT THE LAST DIGIT OF THE DENOM IS THE SAME AS THE ANSWER"""
-    fake_answer_1 = answer * Fraction(random.randint(1, 4), random.randint(3, 9))
-    fake_answer_2 = answer * Fraction(random.randint(1, 4), random.randint(3, 9))
+    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
+    fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
     while fake_answer_1 == fake_answer_2 or fake_answer_1 == answer or fake_answer_2 == answer:  # Validates the answers
         fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
         fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
@@ -975,7 +1039,7 @@ def tutorials(tutorial):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
-        if clicks >= 1 and clicks < len(steps):
+        if (clicks >= 1) and (clicks < len(steps)):
             for index in range(1, clicks+1):
                 height = (index - 1) * 50
                 draw_text(steps[index], small_font,(255,255,255), main_screen, screen_width // 2, 150 + height)

@@ -37,6 +37,9 @@ class Player:
         self.total_money -= self.money_on_table
         self.money_on_table = 0
 
+        if self.total_money < 0:
+            self.total_money = 0
+
 
 class Yintercept:
     def __init__(self, equation):
