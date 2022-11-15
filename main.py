@@ -1,4 +1,4 @@
-from classes import Player, Yintercept
+from classes import Player, Yintercept, Transform, Add, Divide, LCD
 import pygame
 import sys
 from fractions import Fraction
@@ -164,12 +164,6 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
                           screen_height // 2 + 240)  # answer 3
 
 
-def tutorial_steps(tutorial):
-    steps = []
-    if tutorial == 'Find Y-intercept Form':
-        tut = Yintercept(['6x', '7y', '9'])
-        steps.append(tut.equation)
-        return steps
 
 
 def menu(click, message):
@@ -291,7 +285,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Adding/Subtracting Fractions')
+                tutorials('Adding Fractions')
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
@@ -300,7 +294,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                tutorials('Multiplying/Dividing Fractions')
+                tutorials('Dividing Fractions')
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
@@ -932,6 +926,23 @@ def tutorial_steps(tutorial):
     if tutorial == 'Find Y-intercept Form':
         tut = Yintercept(['6x','7y','9'])
         steps = tut.steps
+
+    if tutorial == 'Transform Fraction':
+        tut = Transform()
+        steps = tut.steps
+
+    if tutorial == 'Adding Fractions':
+        tut = Add()
+        steps = tut.steps
+
+    if tutorial == 'Dividing Fractions':
+        tut = Divide()
+        steps = tut.steps
+
+    if tutorial == 'Find Least Common Denominator':
+        tut = LCD()
+        steps = tut.steps
+
     return steps
 
 
