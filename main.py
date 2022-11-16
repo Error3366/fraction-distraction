@@ -3,7 +3,6 @@ import pygame
 import sys
 from fractions import Fraction
 import random
-import time
 
 # initializes the game and pygame fonts
 pygame.init()
@@ -37,7 +36,7 @@ money_rect.center = (1250, 675)
 heart = pygame.image.load("Assets/heart.png")
 heart = pygame.transform.scale(heart, (54, 45))
 heart_rect = heart.get_rect()
-heart_rect.center = (screen_width / 2 + 300, 680)
+heart_rect.center = (screen_width // 2 + 300, 680)
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -124,12 +123,12 @@ def item_UI():
     """ creates the UI for the amount of items the player has"""
 
     draw_text_outline(f"X2: {player.items['double_bet']}", medium_font, (255, 255, 255), main_screen,
-                      screen_width / 2 - 300, 680)
+                      screen_width // 2 - 300, 680)
     draw_text_outline(f"X3: {player.items['triple_bet']}", medium_font, (255, 255, 255), main_screen,
-                      screen_width / 2, 680)
+                      screen_width // 2, 680)
     main_screen.blit(heart, heart_rect)
     draw_text_outline(f": {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
-                      screen_width / 2 + 360, 680)
+                      screen_width // 2 + 360, 680)
 
 
 def answer_choice_text(correct_option, answer, fake_1, fake_2):
@@ -175,10 +174,10 @@ def menu(click, message):
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
     # Rects for the two buttons
-    start_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 - 80, 370, 80)
-    tutorial_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 + 40, 370, 80)
-    quit_button = pygame.Rect(screen_width / 2 + 50, screen_height / 2 + 40, 370, 80)
-    shop_button = pygame.Rect(screen_width / 2 + 50, screen_height / 2 - 80, 370, 80)
+    start_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 - 80, 370, 80)
+    tutorial_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 40, 370, 80)
+    quit_button = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 40, 370, 80)
+    shop_button = pygame.Rect(screen_width // 2 + 50, screen_height // 2 - 80, 370, 80)
 
     """"----------------------------------LOOP-------------------------------"""
     while True:
@@ -223,15 +222,15 @@ def menu(click, message):
             pygame.draw.rect(main_screen, (196, 16, 16), shop_button, 0, 5)
 
         # Draws text on the menu screen
-        draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width / 2, screen_height / 2 - 170)
-        draw_text_outline("Shop/Stats", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                          screen_height / 2 - 40)
-        draw_text_outline("Betting", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
-                          screen_height / 2 - 40)
-        draw_text_outline("Quit", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                          screen_height / 2 + 80)
-        draw_text_outline("Tutorial", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
-                          screen_height / 2 + 80)
+        draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height // 2 - 170)
+        draw_text_outline("Shop/Stats", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                          screen_height // 2 - 40)
+        draw_text_outline("Betting", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
+                          screen_height // 2 - 40)
+        draw_text_outline("Quit", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                          screen_height // 2 + 80)
+        draw_text_outline("Tutorial", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
+                          screen_height // 2 + 80)
 
         item_UI()
         money_UI()
@@ -324,16 +323,16 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (196, 16, 16), transform_button, 0, 5)
 
         # Draws text on the tutorial menu screen
-        draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 - 170)
+        draw_text_outline(message, big_font, (255, 255, 255), main_screen, screen_width // 2, screen_height // 2 - 170)
         draw_text_outline("Add/Subtract", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
-                          screen_height / 2 - 40)
+                          screen_height // 2 - 40)
         draw_text_outline("Multiply/Divide", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
-                          screen_height / 2 - 40)
-        draw_text_outline("LCD", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height / 2 + 80)
+                          screen_height // 2 - 40)
+        draw_text_outline("LCD", small_font, (255, 255, 255), main_screen, screen_width // 2, screen_height // 2 + 80)
         draw_text_outline("Transform Fraction", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 270,
-                          screen_height / 2 + 200)
+                          screen_height // 2 + 200)
         draw_text_outline("Y-Intercept Form", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 270,
-                          screen_height / 2 + 200)
+                          screen_height // 2 + 200)
         # draw_text_outline()("Home", small_font, (255, 255, 255), main_screen, 90, 50)
         # draw_text_outline()("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
@@ -406,11 +405,11 @@ def betting_screen():
             pygame.draw.rect(main_screen, (196, 16, 16), bigbet_button, 0, 5)
 
         draw_text_outline("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                          screen_height / 2 + 100)
+                          screen_height // 2 + 100)
         draw_text_outline("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                          screen_height / 2 + 100)
+                          screen_height // 2 + 100)
         draw_text_outline("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                          screen_height / 2 + 100)
+                          screen_height // 2 + 100)
 
         item_UI()
         money_UI()
@@ -427,7 +426,7 @@ def betting_screen():
 
         main_screen.blit(table, table_rec)
         draw_text_outline("Bet Difficulty!", big_font, (255, 255, 255), main_screen, 645, 200)
-        draw_text_outline("Hard Bet:", medium_font, (255, 255, 255), main_screen, 645, 250)
+        draw_text_outline("Hard Bets:", medium_font, (255, 255, 255), main_screen, 645, 250)
         draw_text_outline("Greater Rewards", medium_font, (255, 255, 255), main_screen, 645, 285)
 
         # updates the game and tick
@@ -509,7 +508,6 @@ def wager_screen(mode):
         draw_text_outline("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
                           screen_height // 2 + 100)
 
-
         item_UI()
         money_UI()
 
@@ -560,6 +558,7 @@ def betting_game_screen(mode):
     elif mode == "med":
         operator = random.randint(0, 3)
         common_factor = random.randint(12, 24)
+
         if operator == 0:
             fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
             fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
@@ -583,24 +582,25 @@ def betting_game_screen(mode):
     else:
         operator = random.randint(0, 9)
         common_factor = random.randint(14, 31)
+
         if operator == 0:
             fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
-            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(2, 4))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
             answer = fraction_1 * fraction_2
             answer_string = f"{fraction_1} × {fraction_2}"
         elif operator == 1 or operator == 2:
             fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
-            fraction_2 = Fraction(common_factor * random.randint(2, 4), random.randint(15, 99))
+            fraction_2 = Fraction(common_factor * random.randint(5, 11), random.randint(15, 99))
             answer = fraction_1 / fraction_2
             answer_string = f"{fraction_1} ÷ {fraction_2}"
         elif operator == 3 or operator == 4 or operator == 5:
             fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
-            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(2, 4))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
             answer = fraction_1 + fraction_2
             answer_string = f"{fraction_1} + {fraction_2}"
         else:
             fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
-            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(2, 4))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
             answer = fraction_1 - fraction_2
             answer_string = f"{fraction_1} - {fraction_2}"
 
@@ -783,12 +783,12 @@ def results(mode, outcome, answer, question):
 
         if outcome:
             draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height / 2 + 100)
+                              screen_height // 2 + 100)
         else:
             draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height / 2 + 100)
+                              screen_height // 2 + 100)
             draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height / 2 + 150)
+                              screen_height // 2 + 150)
 
         money_UI()
 
@@ -818,12 +818,12 @@ def shop_screen():
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
 
     # Rects for the two buttons
-    double_bet_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 - 80, 370, 80)
-    triple_bet_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 + 20, 370, 80)
-    life_line_button = pygame.Rect(screen_width / 2 - 420, screen_height / 2 + 120, 370, 80)
-    completed_tutorial_trophy = pygame.Rect(screen_width / 2 + 50, screen_height / 2 - 80, 370, 80)
-    earn_money_trophy = pygame.Rect(screen_width / 2 + 50, screen_height / 2 + 20, 370, 80)
-    bet_won_trophy = pygame.Rect(screen_width / 2 + 50, screen_height / 2 + 120, 370, 80)
+    double_bet_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 - 80, 370, 80)
+    triple_bet_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 20, 370, 80)
+    life_line_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 120, 370, 80)
+    completed_tutorial_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 - 80, 370, 80)
+    earn_money_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 20, 370, 80)
+    bet_won_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 120, 370, 80)
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
@@ -907,35 +907,35 @@ def shop_screen():
             pygame.draw.rect(main_screen, (196, 16, 16), bet_won_trophy, 0, 5)
 
         # Draws text on the menu screen
-        draw_text_outline("Distracting Shop", big_font, (255, 255, 255), main_screen, screen_width / 2,
-                          screen_height / 2 - 170)
-        draw_text_outline("X2 Bet-$20", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
-                          screen_height / 2 - 40)
-        draw_text_outline("X3 Bet-$35", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 230,
-                          screen_height / 2 + 60)
-        draw_text_outline("Life Line-$30", medium_font, (255, 255, 255), main_screen, screen_width / 2 - 234,
-                          screen_height / 2 + 160)  # shifts it a little to the left to make it fit the rect
+        draw_text_outline("Distracting Shop", big_font, (255, 255, 255), main_screen, screen_width // 2,
+                          screen_height // 2 - 170)
+        draw_text_outline("X2 Bet-$20", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
+                          screen_height // 2 - 40)
+        draw_text_outline("X3 Bet-$35", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
+                          screen_height // 2 + 60)
+        draw_text_outline("Life Line-$30", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 234,
+                          screen_height // 2 + 160)  # shifts it a little to the left to make it fit the rect
 
         if tutorial_active:
-            draw_text_outline(f"PLACE HOLDER", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                              screen_height / 2 - 40)
+            draw_text_outline(f"{len(player.tutorials_completed)} Completed!", medium_font, (255, 255, 255),
+                              main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
         else:
-            draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                              screen_height / 2 - 40)
+            draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                              screen_height // 2 - 40)
 
         if money_active:
-            draw_text_outline(f"${player.total_money_won} Won!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                              screen_height / 2 + 60)
+            draw_text_outline(f"${player.total_money_won} Won!", medium_font, (255, 255, 255), main_screen,
+                              screen_width // 2 + 240, screen_height // 2 + 60)
         else:
-            draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                              screen_height / 2 + 60)
+            draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                              screen_height // 2 + 60)
 
         if bet_active:
-            draw_text_outline(f"{player.bet_won} Bets Won!", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                              screen_height / 2 + 160)
+            draw_text_outline(f"{player.bet_won} Bets Won!", medium_font, (255, 255, 255), main_screen,
+                              screen_width // 2 + 240, screen_height // 2 + 160)
         else:
-            draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width / 2 + 230,
-                              screen_height / 2 + 160)
+            draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                              screen_height // 2 + 160)
 
         item_UI()
         money_UI()
