@@ -1,6 +1,3 @@
-from fractions import Fraction
-
-
 class Player:
     def __init__(self):
         self.total_money = 100  # this can be changed later
@@ -36,6 +33,9 @@ class Player:
 
         self.total_money -= self.money_on_table
         self.money_on_table = 0
+
+        if self.total_money < 0:
+            self.total_money = 0
 
 
 class Yintercept:
@@ -100,7 +100,7 @@ class LCD:
         self.equation = f'Find Least Common Denominator of 2/9 and 7/6'
         self.step1 = f'Factorize 9 and 6'
         self.step2 = f'9 = 3 × 3  and 6 = 3 × 2'
-        #need step in between here to explain next step of finding lcd
+        # need step in between here to explain next step of finding lcd
         self.step3 = f'LCD = 3 × 3 × 2'
         self.step4 = f'LCD = 18'
         self.step5 = 'DONE'
@@ -117,6 +117,4 @@ class Subtract:
         self.step4 = f'(6-5)/14'
         self.step5 = f'1/14'
         self.step6 = 'DONE'
-        self.steps = [self.equation, self.step1, self.step2,self.step3,self.step4,self.step5,self.step6]
-
-
+        self.steps = [self.equation, self.step1, self.step2, self.step3, self.step4, self.step5, self.step6]
