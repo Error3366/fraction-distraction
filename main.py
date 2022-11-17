@@ -1095,17 +1095,33 @@ def tutorials(tutorial):
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
     next_button = pygame.Rect((screen_width // 2) - 100, 600, 200, 100)
 
-    home_button = pygame.Rect(30, 20, 120, 60)
+    back_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
     clicks = 0
+
+    """"----------------------------------LOOP-------------------------------"""
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
-        universal_UI(home_button, quit_button, mx, my, click)
+        if back_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), back_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                tutorial_select("Select Tutorial")
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), back_button, 0, 5)
+
+        if quit_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), quit_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                sys.exit()
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
 
         if next_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), next_button, 0, 5)
@@ -1125,14 +1141,18 @@ def tutorials(tutorial):
         if clicks == len(steps):
             clicks = 0
 
-        draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
+        draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text_outline(equation, medium_font, (255, 255, 255), main_screen, screen_width // 2, 100)
+
         if clicks == 0:
             draw_text_outline('Start', medium_font, (255, 255, 255), main_screen, screen_width//2, 650)
         elif clicks == len(steps) - 1:
             draw_text_outline('Again', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
         else:
             draw_text_outline('Next', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
+
+        draw_text_outline("Back", small_font, (255, 255, 255), main_screen, 90, 50)
+        draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
         click = False  # resets the mouse click
 
