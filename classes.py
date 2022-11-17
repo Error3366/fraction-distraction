@@ -1,8 +1,8 @@
 class Player:
     def __init__(self):
         self.total_money = 100  # this can be changed later
-        self.bet_won = 7
-        self.total_money_won = 125
+        self.bet_won = 0
+        self.total_money_won = 0
         self.money_on_table = 0
         self.items = {"double_bet": 0, "triple_bet": 0, "life_line": 0}
         self.tutorials_completed = []
