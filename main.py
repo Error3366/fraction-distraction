@@ -40,7 +40,7 @@ heart_rect.center = (screen_width // 2 + 300, 680)
 
 
 def draw_text(text, font, color, surface, x, y):
-    """ creates a text box
+    """creates a text box
 
     @param text: string of the text
     @param font: font of the text, should be in the .ttf file format
@@ -57,7 +57,7 @@ def draw_text(text, font, color, surface, x, y):
 
 
 def draw_text_outline(text, font, color, surface, x, y):
-    """ utilizes draw_text to create a black outline
+    """utilizes draw_text to create a black outline
 
     :param text: string of the text
     :param font: font of the text, should be in the .ttf file format
@@ -83,13 +83,13 @@ def draw_text_outline(text, font, color, surface, x, y):
 
 
 def universal_UI(home_button, quit_button, mx, my, click):
-    """ creates the basic home button (top left) and quit button (top right)
+    """creates the basic home button (top left) and quit button (top right)
 
-    :param quit_button:
-    :param home_button:
-    :param mx:
-    :param my:
-    :param click:
+    :param quit_button: rect of the quit button
+    :param home_button: rect of the home button
+    :param mx: x-pos of mouse
+    :param my: y-pos of mouse
+    :param click: click boolean, True if player is clicking
     """
 
     if home_button.collidepoint((mx, my)):
@@ -113,14 +113,14 @@ def universal_UI(home_button, quit_button, mx, my, click):
 
 
 def money_UI():
-    """ creates the UI for the total money the player has"""
+    """creates the UI for the total money the player has"""
 
     main_screen.blit(money, money_rect)
     draw_text_outline(f"${player.total_money}", medium_font, (255, 255, 255), main_screen, 1160, 680)
 
 
 def item_UI():
-    """ creates the UI for the amount of items the player has"""
+    """creates the UI for the amount of items the player has"""
 
     draw_text_outline(f"X2: {player.items['double_bet']}", medium_font, (255, 255, 255), main_screen,
                       screen_width // 2 - 300, 680)
@@ -129,38 +129,6 @@ def item_UI():
     main_screen.blit(heart, heart_rect)
     draw_text_outline(f": {player.items['life_line']}", medium_font, (255, 255, 255), main_screen,
                       screen_width // 2 + 360, 680)
-
-
-def num_n_denom(fraction_1, fraction_2):
-    """
-
-    :param fraction_1:
-    :param fraction_2:
-    :return:
-    """
-
-    numer1_factors = []
-    denom1_factors = []
-    numer2_factors = []
-    denom2_factors = []
-
-    for i in range(2, fraction_1.numerator + 1):
-        if fraction_1.numerator % i == 0:
-            numer1_factors.append(i)
-
-    for i in range(2, fraction_1.denominator + 1):
-        if fraction_1.denominator % i == 0:
-            denom1_factors.append(i)
-
-    for i in range(2, fraction_2.numerator + 1):
-        if fraction_2.denominator % i == 0:
-            numer2_factors.append(i)
-
-    for i in range(2, fraction_2.denominator + 1):
-        if fraction_2.denominator % i == 0:
-            denom2_factors.append(i)
-
-    return numer1_factors, denom1_factors, numer2_factors, denom2_factors
 
 
 def answer_choice_text(correct_option, answer, fake_1, fake_2):
@@ -196,10 +164,11 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
 
 
 def menu(click, message):
-    """ creates the menu screen for the game
+    """the main menu screen for the game
 
-    @param click: state of the mouse, True if player presses Mouse 1
-    @param message: string for the message at the top of the screen
+    :param click: state of the mouse, True if player pressed Mouse 1
+    :param message: string for the message at the top of the screen
+    :return:
     """
 
     """---------------------------------SETUP-------------------------------"""
@@ -282,9 +251,9 @@ def menu(click, message):
 
 
 def tutorial_select(message):
-    """ creates the level select screen where the user can pick between: easy, hard, 2-players
+    """the screen to select the unit to learn more about
 
-    @param message: string for the message at the top of the screen
+    :param message: string for the message at the top of the screen
     """
 
     """---------------------------------SETUP-------------------------------"""
@@ -386,6 +355,8 @@ def tutorial_select(message):
 
 
 def betting_screen():
+    """the screen for selecting which type of bet the player wants"""
+
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -467,6 +438,11 @@ def betting_screen():
 
 
 def wager_screen(mode):
+    """ the screen for selecting which wager the player wants
+
+    :param mode: the mode the player chose, string
+    """
+
     """---------------------------------SETUP-------------------------------"""
 
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
@@ -493,14 +469,14 @@ def wager_screen(mode):
 
         universal_UI(home_button, quit_button, mx, my, click)
 
-        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
+        # Check for mouse over and mouse click on the button, button changes color on mouse over
         if player.total_money < 15:
             pygame.draw.rect(main_screen, (97, 12, 3), wager1_button, 0, 5)
             if click and wager1_button.collidepoint((mx, my)):
                 error_sound.play()
         elif wager1_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), wager1_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
+            if click:
                 button_sound.play()
                 player.bet(15)
                 betting_game_screen(mode)
@@ -513,7 +489,7 @@ def wager_screen(mode):
                 error_sound.play()
         elif wager2_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), wager2_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
+            if click:
                 button_sound.play()
                 player.bet(25)
                 betting_game_screen(mode)
@@ -526,7 +502,7 @@ def wager_screen(mode):
                 error_sound.play()
         elif wager3_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), wager3_button, 0, 5)
-            if click:  # calls the main_game function and starts the game
+            if click:
                 button_sound.play()
                 player.bet(50)
                 betting_game_screen(mode)
@@ -562,6 +538,11 @@ def wager_screen(mode):
 
 
 def betting_game_screen(mode):
+    """the screen for main problem/items/answer choices
+
+    :param mode: the mode the player chose, string
+    """
+
     """---------------------------------SETUP-------------------------------"""
 
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
@@ -785,6 +766,8 @@ def betting_game_screen(mode):
 
 
 def results(mode, outcome, answer, question):
+    """the screen for the results of the bet"""
+
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -844,6 +827,8 @@ def results(mode, outcome, answer, question):
 
 
 def shop_screen():
+    """the screen for the shop and progress"""
+
     """---------------------------------SETUP-------------------------------"""
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -987,6 +972,12 @@ def shop_screen():
 
 
 def tutorial_steps(tutorial):
+    """
+
+    :param tutorial:
+    :return:
+    """
+
     if tutorial == 'Find Y-intercept Form':
         tut = Yintercept(['6x','7y','9'])
         steps = tut.steps
