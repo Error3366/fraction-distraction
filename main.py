@@ -979,7 +979,7 @@ def tutorial_steps(tutorial):
         tut = Multiply()
         steps = tut.steps
 
-    if tutorial == 'Find Least Common Denominator':
+    if tutorial == 'Find LCD':
         tut = LCD()
         steps = tut.steps
 

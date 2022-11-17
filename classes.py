@@ -66,7 +66,6 @@ class Transform:
 class Add:
     def __init__(self):
         self.equation = f'4/7 + 8/5'
-        # lcd step and multiply by 1 to get common denominator
         self.step1 = f'(5/5 × 4/7) + (7/7 × 8/5)'
         self.step2 = f'20/35 + 56/35'
         self.step3 = f'76/35'
