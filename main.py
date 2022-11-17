@@ -592,6 +592,7 @@ def betting_game_screen(mode):
     table_rec = table.get_rect()
     table_rec.center = (640, 200)
 
+    # Problem and answer generation with common factors
     if mode == "small":
         operator = random.randint(0, 1)
         common_factor = random.randint(2, 12)
@@ -661,7 +662,7 @@ def betting_game_screen(mode):
         fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
         fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
 
-    correct_answer = random.randint(1, 3)
+    correct_answer = random.randint(1, 3)  # Between choice 1, 2, and 3
 
     # Button recs
     item1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
@@ -975,8 +976,12 @@ def shop_screen():
                           screen_height // 2 + 160)  # shifts it a little to the left to make it fit the rect
 
         if tutorial_active:
-            draw_text_outline(f"{len(player.tutorials_completed)} Completed!", medium_font, (255, 255, 255),
-                              main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
+            if len(player.tutorials_completed) == 7:
+                draw_text_outline(f"Completed All", medium_font, (255, 255, 255),
+                                  main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
+            else:
+                draw_text_outline(f"{len(player.tutorials_completed)} Completed!", medium_font, (255, 255, 255),
+                                  main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
         else:
             draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
                               screen_height // 2 - 40)
@@ -1032,7 +1037,7 @@ def special_tutorials(tut_types):
     option1_button = pygame.Rect((screen_width // 4) - 185, screen_height/2, 370, 100)
     option2_button = pygame.Rect((3*(screen_width // 4)) - 185, screen_height/2, 370, 100)
 
-    home_button = pygame.Rect(30, 20, 120, 60)
+    back_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
 
     """"----------------------------------LOOP-------------------------------"""
@@ -1042,7 +1047,23 @@ def special_tutorials(tut_types):
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
-        universal_UI(home_button, quit_button, mx, my, click)
+        if back_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), back_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                tutorial_select("Select Tutorial")
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), back_button, 0, 5)
+
+        if quit_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (64, 128, 230), quit_button, 0, 5)
+            if click:  # calls the main_game function and starts the game
+                button_sound.play()
+                sys.exit()
+        else:
+            pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
+
+        money_UI()
 
         if option1_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), option1_button, 0, 5)
@@ -1066,6 +1087,9 @@ def special_tutorials(tut_types):
                           screen_height/2 + 50)
         draw_text_outline(tutorial1, medium_font, (255, 255, 255), main_screen, screen_width // 4, screen_height/2 + 50)
 
+        draw_text_outline("Back", small_font, (255, 255, 255), main_screen, 90, 50)
+        draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
+
         click = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -1080,10 +1104,9 @@ def special_tutorials(tut_types):
 
 
 def tutorials(tutorial):
-    """
+    """the screen for the different tutorials
 
     :param tutorial:
-    :return:
     """
 
     """---------------------------------SETUP-------------------------------"""
@@ -1100,12 +1123,16 @@ def tutorials(tutorial):
 
     clicks = 0
 
+    finished = False
+
     """"----------------------------------LOOP-------------------------------"""
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        money_UI()
 
         if back_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (64, 128, 230), back_button, 0, 5)
@@ -1148,8 +1175,15 @@ def tutorials(tutorial):
             draw_text_outline('Start', medium_font, (255, 255, 255), main_screen, screen_width//2, 650)
         elif clicks == len(steps) - 1:
             draw_text_outline('Again', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
+            if tutorial not in player.tutorials_completed:
+                player.tutorials_completed.append(tutorial)
+                player.total_money += 25
+            finished = True
         else:
             draw_text_outline('Next', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
+
+        if finished:
+            draw_text_outline("+$25", big_font, (255, 255, 255), main_screen, screen_width // 2, 475)
 
         draw_text_outline("Back", small_font, (255, 255, 255), main_screen, 90, 50)
         draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
