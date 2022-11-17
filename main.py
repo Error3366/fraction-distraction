@@ -163,6 +163,44 @@ def answer_choice_text(correct_option, answer, fake_1, fake_2):
                           screen_height // 2 + 240)  # answer 3
 
 
+def tutorial_steps(tutorial):
+    """
+
+    :param tutorial:
+    :return:
+    """
+
+    if tutorial == 'Find Y-intercept Form':
+        tut = Yintercept(['6x', '7y', '9'])
+        steps = tut.steps
+
+    if tutorial == 'Transform Fraction':
+        tut = Transform()
+        steps = tut.steps
+
+    if tutorial == 'Subtract':
+        tut = Subtract()
+        steps = tut.steps
+
+    if tutorial == 'Add':
+        tut = Add()
+        steps = tut.steps
+
+    if tutorial == 'Divide':
+        tut = Divide()
+        steps = tut.steps
+
+    if tutorial == 'Multiply':
+        tut = Multiply()
+        steps = tut.steps
+
+    if tutorial == 'Find LCD':
+        tut = LCD()
+        steps = tut.steps
+
+    return steps
+
+
 def menu(click, message):
     """the main menu screen for the game
 
@@ -283,7 +321,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), add_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                special_tutorials(['Add','Subtract'])
+                special_tutorials(['Add', 'Subtract'])
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), add_button, 0, 5)
 
@@ -292,7 +330,7 @@ def tutorial_select(message):
             pygame.draw.rect(main_screen, (240, 20, 20), multiply_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
-                special_tutorials(['Multiply','Divide'])
+                special_tutorials(['Multiply', 'Divide'])
 
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), multiply_button, 0, 5)
@@ -769,6 +807,7 @@ def results(mode, outcome, answer, question):
     """the screen for the results of the bet"""
 
     """---------------------------------SETUP-------------------------------"""
+
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
     pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
@@ -848,6 +887,8 @@ def shop_screen():
     tutorial_active = False
     money_active = False
     bet_active = False
+
+    """"----------------------------------LOOP-------------------------------"""
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -971,47 +1012,15 @@ def shop_screen():
         clock.tick(60)
 
 
-def tutorial_steps(tutorial):
+def special_tutorials(tut_types):
     """
 
-    :param tutorial:
+    :param tut_types:
     :return:
     """
 
-    if tutorial == 'Find Y-intercept Form':
-        tut = Yintercept(['6x','7y','9'])
-        steps = tut.steps
+    """---------------------------------SETUP-------------------------------"""
 
-    if tutorial == 'Transform Fraction':
-        tut = Transform()
-        steps = tut.steps
-
-    if tutorial == 'Subtract':
-        tut = Subtract()
-        steps = tut.steps
-
-    if tutorial == 'Add':
-        tut = Add()
-        steps = tut.steps
-
-    if tutorial == 'Divide':
-        tut = Divide()
-        steps = tut.steps
-
-    if tutorial == 'Multiply':
-        tut = Multiply()
-        steps = tut.steps
-
-    if tutorial == 'Find Least Common Denominator':
-        tut = LCD()
-        steps = tut.steps
-
-    return steps
-
-
-
-
-def special_tutorials(tut_types):
     # for addition/subtraction tutorial or multiplication/division tutorial
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
 
@@ -1023,9 +1032,10 @@ def special_tutorials(tut_types):
     option1_button = pygame.Rect((screen_width // 4) - 185, screen_height/2, 370, 100)
     option2_button = pygame.Rect((3*(screen_width // 4)) - 185, screen_height/2, 370, 100)
 
-
     home_button = pygame.Rect(30, 20, 120, 60)
     quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
 
     while True:
         main_screen.blit(start_background, (0, 0))  # creates the background image
@@ -1034,17 +1044,14 @@ def special_tutorials(tut_types):
 
         universal_UI(home_button, quit_button, mx, my, click)
 
-
         if option1_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), option1_button, 0, 5)
             if click:  # calls the main_game function and starts the game
                 button_sound.play()
                 tutorials(tutorial1)
 
-
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), option1_button, 0, 5)
-
 
         if option2_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), option2_button, 0, 5)
@@ -1052,11 +1059,11 @@ def special_tutorials(tut_types):
                 button_sound.play()
                 tutorials(tutorial2)
 
-
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), option2_button, 0, 5)
 
-        draw_text_outline(tutorial2, medium_font, (255, 255, 255), main_screen, 3*screen_width // 4, screen_height/2 + 50)
+        draw_text_outline(tutorial2, medium_font, (255, 255, 255), main_screen, 3 * screen_width // 4,
+                          screen_height/2 + 50)
         draw_text_outline(tutorial1, medium_font, (255, 255, 255), main_screen, screen_width // 4, screen_height/2 + 50)
 
         click = False
@@ -1071,7 +1078,16 @@ def special_tutorials(tut_types):
         pygame.display.update()
         clock.tick(60)
 
+
 def tutorials(tutorial):
+    """
+
+    :param tutorial:
+    :return:
+    """
+
+    """---------------------------------SETUP-------------------------------"""
+
     steps = tutorial_steps(tutorial)
     equation = steps[0]
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
@@ -1100,11 +1116,11 @@ def tutorials(tutorial):
         else:
             pygame.draw.rect(main_screen, (196, 16, 16), next_button, 0, 5)
 
-
-        if clicks >= 1 and clicks < len(steps):
+        if (clicks >= 1) and (clicks < len(steps)):
             for index in range(1, clicks+1):
                 height = (index - 1) * 50
-                draw_text_outline(steps[index], medium_font,(255,255,255), main_screen, screen_width // 2, 150 + height)
+                draw_text_outline(steps[index], medium_font, (255, 255, 255), main_screen, screen_width // 2,
+                                  height + 150)
 
         if clicks == len(steps):
             clicks = 0
@@ -1112,12 +1128,11 @@ def tutorials(tutorial):
         draw_text(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
         draw_text_outline(equation, medium_font, (255, 255, 255), main_screen, screen_width // 2, 100)
         if clicks == 0:
-            draw_text_outline('Start', medium_font, (255,255,255), main_screen, screen_width//2, 650)
+            draw_text_outline('Start', medium_font, (255, 255, 255), main_screen, screen_width//2, 650)
         elif clicks == len(steps) - 1:
             draw_text_outline('Again', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
         else:
             draw_text_outline('Next', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
-
 
         click = False  # resets the mouse click
 
