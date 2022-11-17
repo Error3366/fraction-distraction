@@ -1087,6 +1087,8 @@ def tutorials(tutorial):
     """
 
     """---------------------------------SETUP-------------------------------"""
+    if tutorial == 'Transform Fraction':
+        print(tutorial)
 
     steps = tutorial_steps(tutorial)
     equation = steps[0]
