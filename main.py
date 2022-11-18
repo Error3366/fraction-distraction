@@ -1148,6 +1148,7 @@ def tutorials(tutorial):
 
         draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
 
+        # edge case for the special fraction format
         if tutorial == 'Transform Fraction':
             draw_text_outline('3', medium_font, (255, 255, 255), main_screen, screen_width // 2 - 10, 130)
             draw_text_outline('2', medium_font, (255, 255, 255), main_screen, screen_width // 2 + 15, 100)
