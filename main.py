@@ -1089,7 +1089,6 @@ def tutorials(tutorial):
 
     """---------------------------------SETUP-------------------------------"""
 
-
     steps = tutorial_steps(tutorial)
     equation = steps[0]
     click = False  # resets the mouse click to avoid a bug where one click would trigger two events
