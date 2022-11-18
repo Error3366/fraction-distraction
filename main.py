@@ -174,7 +174,7 @@ def tutorial_steps(mode):
                 'Isolate 7y: 7y = -6x + 9', 'Divide equation by 1/7: 1/7 × (7y = -6x + 9)',
                 '(1/7 × 7y) = (1/7 × -6x) + (1/7 × 9)', '7/7y = -6x/7 + 9/7', 'y = -6x/7 + 9/7', 'DONE']
     elif mode == "Divide":
-        return ['(4/7) ÷  (8/5)', 'Multiply 4/7 by reciprocal of 8/5', '4/7 × 5/8', '(4 × 5) / (7 × 8)', '20/56',
+        return ['(4/7) ÷  (9/5)', 'Multiply 4/7 by reciprocal of 9/5', '4/7 × 5/9', '(4 × 5) / (7 × 9)', '20/63',
                 'DONE']
     elif mode == "Multiply":
         return ['7/9 × 2/3', '(7 × 2) / (9 × 3)', '14/27', 'DONE']
@@ -182,9 +182,9 @@ def tutorial_steps(mode):
         return ['Find Least Common Denominator of 2/9 and 7/6', 'Factorize 9 and 6', '9 = 3 × 3  and 6 = 3 × 2',
                 'LCD = 3 × 3 × 2', 'LCD = 18', 'DONE']
     elif mode == 'Transform Fraction':
-        return ['3 4/6', '3 + 4/6', '3 = 18/6', '18/6 + 4/6', '(18+4)/6', '22/6', 'DONE']
+        return ['3 2/3', '3 + 2/3', '3 = 9/3', '9/3 + 2/3', '(9+2)/3', '11/3', 'DONE']
     elif mode == "Add":
-        return ['4/7 + 8/5', '(5/5 × 4/7) + (7/7 × 8/5)', '20/35 + 56/35', '76/35', 'DONE']
+        return ['4/9 + 8/3','LCD = 9', '(1/1 × 4/9) + (3/3 × 8/3)','4/9 + 24/9', '(4+24)/9', '28/9', 'DONE']
     elif mode == "Subtract":
         return ['3/7 - 5/14', 'LCD = 14', '(2/2 × 3/7) - (1/1 × 5/14)', '6/14 - 5/14', '(6-5)/14', '1/14', 'DONE']
 
@@ -1088,8 +1088,7 @@ def tutorials(tutorial):
     """
 
     """---------------------------------SETUP-------------------------------"""
-    if tutorial == 'Transform Fraction':
-        print(tutorial)
+
 
     steps = tutorial_steps(tutorial)
     equation = steps[0]
@@ -1143,13 +1142,21 @@ def tutorials(tutorial):
             for index in range(1, clicks+1):
                 height = (index - 1) * 50
                 draw_text_outline(steps[index], medium_font, (255, 255, 255), main_screen, screen_width // 2,
-                                  height + 150)
+                                  height + 170)
 
         if clicks == len(steps):
             clicks = 0
 
         draw_text_outline(tutorial, big_font, (255, 255, 255), main_screen, screen_width // 2, 50)
-        draw_text_outline(equation, medium_font, (255, 255, 255), main_screen, screen_width // 2, 100)
+
+        if tutorial == 'Transform Fraction':
+            draw_text_outline('3', medium_font, (255, 255, 255), main_screen, screen_width // 2 - 10, 130)
+            draw_text_outline('2', medium_font, (255, 255, 255), main_screen, screen_width // 2 + 15, 100)
+            draw_text_outline('/', medium_font, (255, 255, 255), main_screen, screen_width // 2 + 20, 120)
+            draw_text_outline('3', medium_font, (255, 255, 255), main_screen, screen_width // 2 + 35, 140)
+
+        else:
+            draw_text_outline(equation, medium_font, (255, 255, 255), main_screen, screen_width // 2, 100)
 
         if clicks == 0:
             draw_text_outline('Start', medium_font, (255, 255, 255), main_screen, screen_width//2, 650)
@@ -1163,7 +1170,7 @@ def tutorials(tutorial):
             draw_text_outline('Next', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
 
         if finished:
-            draw_text_outline("+$25", big_font, (255, 255, 255), main_screen, screen_width // 2, 475)
+            draw_text_outline("+$25", big_font, (255, 255, 255), main_screen, screen_width // 2, 500)
 
         draw_text_outline("Back", small_font, (255, 255, 255), main_screen, 90, 50)
         draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
