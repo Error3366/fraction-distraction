@@ -4,6 +4,9 @@ import sys
 from fractions import Fraction
 import random
 
+"""-----GLOBAL SETUP/VARIABLES/ASSETS-----"""
+
+
 # initializes the game and pygame fonts
 pygame.init()
 pygame.font.init()
@@ -37,6 +40,9 @@ heart = pygame.image.load("Assets/heart.png")
 heart = pygame.transform.scale(heart, (54, 45))
 heart_rect = heart.get_rect()
 heart_rect.center = (screen_width // 2 + 300, 680)
+
+
+"""-----SUPPORTING FUNCTIONS-----"""
 
 
 def draw_text(text, font, color, surface, x, y):
@@ -189,6 +195,44 @@ def tutorial_steps(mode):
         return ['3/7 - 5/14', 'LCD = 14', '(2/2 × 3/7) - (1/1 × 5/14)', '6/14 - 5/14', '(6-5)/14', '1/14', 'DONE']
 
 
+def nothing_to_see_here():
+    #           .-.
+    #          o   \     .-.
+    #             .----.'   \
+    #           .'o)  / `.   o
+    #          /         |
+    #          \_)       /-.
+    #            '_.`    \  \
+    #             `.      |  \
+    #              |       \ |
+    #          .--/`-.     / /
+    #        .'.-/`-. `.  .\|
+    #       /.' /`._ `-    '-.
+    #  ____(|__/`-..`-   '-._ \
+    # |`------.'-._ `      ||\ \
+    # || #   /-.   `   /   || \|
+    # ||   #/   `--'  /  /_::_|)__
+    # `|____|-._.-`  /  ||`--------`
+    #       \-.___.` | / || #      |
+    #        \       | | ||   #  # |
+    #        /`.___.'\ |.`|________|
+    #        | /`.__.'|'.`
+    #      __/ \    __/ \
+    #     /__.-.)  /__.-.)
+    # A WILD BUG ON ITS WAY TO WORK, MESSING UP YOUR CODE!
+
+    #              _______
+    #             / .   . \
+    #            I         I
+    # --------OOO---|   |---OOO--------
+    #               (___)
+    # KILROY WAS HERE :)
+    pass
+
+
+"""-----GAME SCREENS-----"""
+
+
 def menu(click, message):
     """the main menu screen for the game
 
@@ -258,6 +302,647 @@ def menu(click, message):
         draw_text_outline("Tutorial", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
                           screen_height // 2 + 80)
 
+        # basic UI elements
+        item_UI()
+        money_UI()
+
+        click = False  # resets the click event, prevents one click -> two actions
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        pygame.display.update()
+        clock.tick(60)
+
+
+def betting_screen():
+    """the screen for selecting which type of bet the player wants"""
+
+    """---------------------------------SETUP-------------------------------"""
+
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
+    smallbet_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
+    medbet_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
+    bigbet_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        """BET BUTTONS"""
+
+        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
+        if smallbet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), smallbet_button, 0, 5)
+            if click:
+                button_sound.play()
+                wager_screen("small")
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), smallbet_button, 0, 5)
+
+        if medbet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), medbet_button, 0, 5)
+            if click:
+                button_sound.play()
+                wager_screen("med")
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), medbet_button, 0, 5)
+
+        if bigbet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), bigbet_button, 0, 5)
+            if click:
+                button_sound.play()
+                wager_screen("big")
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), bigbet_button, 0, 5)
+
+        draw_text_outline("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 100)
+        draw_text_outline("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 100)
+        draw_text_outline("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 100)
+
+        # basic UI elements
+        item_UI()
+        money_UI()
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        main_screen.blit(table, table_rec)
+        draw_text_outline("Bet Difficulty!", big_font, (255, 255, 255), main_screen, 645, 200)
+        draw_text_outline("Hard Bets:", medium_font, (255, 255, 255), main_screen, 645, 250)
+        draw_text_outline("Greater Rewards", medium_font, (255, 255, 255), main_screen, 645, 285)
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def wager_screen(mode):
+    """the screen for selecting which wager the player wants
+
+    :param mode: the mode the player chose, string
+    """
+
+    """---------------------------------SETUP-------------------------------"""
+
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
+    wager1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
+    wager2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
+    wager3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        """WAGER BUTTONS"""
+
+        # Check for mouse over and mouse click on the button, button changes color on mouse over
+        if player.total_money < 15:
+            pygame.draw.rect(main_screen, (97, 12, 3), wager1_button, 0, 5)
+            if click and wager1_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif wager1_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), wager1_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.bet(15)
+                betting_game_screen(mode)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), wager1_button, 0, 5)
+
+        if player.total_money < 25:
+            pygame.draw.rect(main_screen, (97, 12, 3), wager2_button, 0, 5)
+            if click and wager2_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif wager2_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), wager2_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.bet(25)
+                betting_game_screen(mode)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), wager2_button, 0, 5)
+
+        if player.total_money < 50:
+            pygame.draw.rect(main_screen, (97, 12, 3), wager3_button, 0, 5)
+            if click and wager3_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif wager3_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), wager3_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.bet(50)
+                betting_game_screen(mode)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), wager3_button, 0, 5)
+
+        draw_text_outline("$15", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 100)
+        draw_text_outline("$25", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 100)
+        draw_text_outline("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 100)
+
+        # basic UI elements
+        item_UI()
+        money_UI()
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        main_screen.blit(table, table_rec)
+
+        # draw last, so it's on top of the table
+        draw_text_outline("Select Wager!", big_font, (255, 255, 255), main_screen, 640, 200)
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def betting_game_screen(mode):
+    """the screen for main problem/items/answer choices
+
+    :param mode: the mode the player chose, string
+    """
+
+    """---------------------------------SETUP-------------------------------"""
+
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
+    # Problem and answer generation with common factors
+    if mode == "small":
+        operator = random.randint(0, 1)
+        common_factor = random.randint(2, 12)
+
+        if operator == 0:
+            fraction_1 = Fraction(common_factor * random.randint(1, 4), random.randint(1, 41))
+            fraction_2 = Fraction(random.randint(1, 27), common_factor * random.randint(1, 3))
+            answer = fraction_1 * fraction_2
+            answer_string = f"{fraction_1} × {fraction_2}"
+        else:
+            fraction_1 = Fraction(common_factor * random.randint(1, 4), random.randint(1, 41))
+            fraction_2 = Fraction(common_factor * random.randint(1, 3), random.randint(1, 27))
+            answer = fraction_1 / fraction_2
+            answer_string = f"{fraction_1} ÷ {fraction_2}"
+    elif mode == "med":
+        operator = random.randint(0, 3)
+        common_factor = random.randint(12, 24)
+
+        if operator == 0:
+            fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
+            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
+            answer = fraction_1 * fraction_2
+            answer_string = f"{fraction_1} × {fraction_2}"
+        elif operator == 1:
+            fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
+            fraction_2 = Fraction(common_factor * random.randint(2, 4), random.randint(5, 50))
+            answer = fraction_1 / fraction_2
+            answer_string = f"{fraction_1} ÷ {fraction_2}"
+        elif operator == 2:
+            fraction_1 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 5))
+            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
+            answer = fraction_1 + fraction_2
+            answer_string = f"{fraction_1} + {fraction_2}"
+        else:
+            fraction_1 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 5))
+            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
+            answer = fraction_1 - fraction_2
+            answer_string = f"{fraction_1} - {fraction_2}"
+    else:
+        operator = random.randint(0, 9)
+        common_factor = random.randint(14, 31)
+
+        if operator == 0:
+            fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
+            answer = fraction_1 * fraction_2
+            answer_string = f"{fraction_1} × {fraction_2}"
+        elif operator == 1 or operator == 2:
+            fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
+            fraction_2 = Fraction(common_factor * random.randint(5, 11), random.randint(15, 99))
+            answer = fraction_1 / fraction_2
+            answer_string = f"{fraction_1} ÷ {fraction_2}"
+        elif operator == 3 or operator == 4 or operator == 5:
+            fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
+            answer = fraction_1 + fraction_2
+            answer_string = f"{fraction_1} + {fraction_2}"
+        else:
+            fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
+            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
+            answer = fraction_1 - fraction_2
+            answer_string = f"{fraction_1} - {fraction_2}"
+
+    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
+    fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
+    while fake_answer_1 == fake_answer_2 or fake_answer_1 == answer or fake_answer_2 == answer:  # Validates the answers
+        fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
+        fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
+
+    correct_answer = random.randint(1, 3)  # Between choice 1, 2, and 3
+
+    # Button recs
+    item1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
+    item2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
+    item3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
+    ans1 = pygame.Rect((screen_width // 2) - 550, (screen_height // 2) + 200, 300, 80)
+    ans2 = pygame.Rect((screen_width // 2) - 150, (screen_height // 2) + 200, 300, 80)
+    ans3 = pygame.Rect((screen_width // 2) + 250, (screen_height // 2) + 200, 300, 80)
+
+    # Item booleans toggles
+    double_active = False
+    triple_active = False
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        """ITEM BUTTONS"""
+
+        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
+        if double_active:
+            pygame.draw.rect(main_screen, (8, 82, 3), item1_button, 0, 5)
+            if click and item1_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif player.items["double_bet"] == 0:
+            pygame.draw.rect(main_screen, (97, 12, 3), item1_button, 0, 5)
+            if click and item1_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif item1_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), item1_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["double_bet"] -= 1
+                player.money_on_table *= 2
+                double_active = True
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), item1_button, 0, 5)
+
+        if triple_active:
+            pygame.draw.rect(main_screen, (8, 82, 3), item2_button, 0, 5)
+            if click and item2_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif player.items["triple_bet"] == 0:
+            pygame.draw.rect(main_screen, (97, 12, 3), item2_button, 0, 5)
+            if click and item2_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif item2_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), item2_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["triple_bet"] -= 1
+                player.money_on_table *= 3
+                triple_active = True
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), item2_button, 0, 5)
+
+        if player.items["life_line"] == 0:
+            pygame.draw.rect(main_screen, (97, 12, 3), item3_button, 0, 5)
+            if click and item3_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif item3_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["life_line"] -= 1
+                player.money_on_table = 0
+                betting_screen()
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), item3_button, 0, 5)
+
+        """ANSWER BUTTONS"""
+
+        if ans1.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), ans1, 0, 5)
+            if click:
+                button_sound.play()
+                if correct_answer == 1:
+                    results(mode, True, answer, answer_string)
+                else:
+                    results(mode, False, answer, answer_string)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
+
+        if ans2.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), ans2, 0, 5)
+            if click:
+                button_sound.play()
+                if correct_answer == 2:
+                    results(mode, True, answer, answer_string)
+                else:
+                    results(mode, False, answer, answer_string)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
+
+        if ans3.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), ans3, 0, 5)
+            if click:
+                button_sound.play()
+                if correct_answer == 3:
+                    results(mode, True, answer, answer_string)
+                else:
+                    results(mode, False, answer, answer_string)
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
+
+        main_screen.blit(table, table_rec)
+        draw_text_outline(answer_string, big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
+
+        draw_text_outline("X2 Wager", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
+                          screen_height // 2 + 100)
+        draw_text_outline("X3 Wager", small_font, (255, 255, 255), main_screen, (screen_width // 2),
+                          screen_height // 2 + 100)
+        draw_text_outline("Life Line", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
+                          screen_height // 2 + 100)
+
+        # Assigning answers to the corresponding options
+        answer_choice_text(correct_answer, answer, fake_answer_1, fake_answer_2)
+
+        # Basic UI elements
+        item_UI()
+        money_UI()
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                player.lose()
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def results(mode, outcome, answer, question):
+    """the screen for the results of the bet"""
+
+    """---------------------------------SETUP-------------------------------"""
+
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    if outcome:
+        money_won = player.win(mode)
+    else:
+        wage = player.money_on_table
+        player.lose()
+
+    table = pygame.image.load("Assets/table.png")
+    table = pygame.transform.scale(table, (765, 464))
+    table_rec = table.get_rect()
+    table_rec.center = (640, 200)
+
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:  # screen loop
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        if outcome:
+            draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height // 2 + 100)
+        else:
+            draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height // 2 + 100)
+            draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
+                              screen_height // 2 + 150)
+
+        # basic UI elements
+        item_UI()
+        money_UI()
+
+        click = False  # resets the mouse click
+
+        # Checks for game events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                click = True
+
+        main_screen.blit(table, table_rec)
+
+        # draw last, so it's on top of the table image
+        draw_text_outline(question, big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
+
+        # updates the game and tick
+        pygame.display.update()
+        clock.tick(60)
+
+
+def shop_screen():
+    """the screen for the shop and progress"""
+
+    """---------------------------------SETUP-------------------------------"""
+    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
+
+    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
+
+    # Rects for the buttons
+    double_bet_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 - 80, 370, 80)
+    triple_bet_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 20, 370, 80)
+    life_line_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 120, 370, 80)
+    completed_tutorial_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 - 80, 370, 80)
+    earn_money_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 20, 370, 80)
+    bet_won_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 120, 370, 80)
+    home_button = pygame.Rect(30, 20, 120, 60)
+    quit_button = pygame.Rect(1130, 20, 120, 60)
+
+    # Trophy booleans toggles
+    tutorial_active = False
+    money_active = False
+    bet_active = False
+
+    """"----------------------------------LOOP-------------------------------"""
+
+    while True:
+        main_screen.blit(start_background, (0, 0))  # creates the background image
+
+        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
+
+        universal_UI(home_button, quit_button, mx, my, click)
+
+        """ITEM BUTTONS"""
+
+        if player.total_money < 20:
+            pygame.draw.rect(main_screen, (97, 12, 3), double_bet_button, 0, 5)
+            if click and double_bet_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif double_bet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), double_bet_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["double_bet"] += 1
+                player.total_money -= 20
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), double_bet_button, 0, 5)
+
+        if player.total_money < 35:
+            pygame.draw.rect(main_screen, (97, 12, 3), triple_bet_button, 0, 5)
+            if click and triple_bet_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif triple_bet_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), triple_bet_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["triple_bet"] += 1
+                player.total_money -= 35
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), triple_bet_button, 0, 5)
+
+        if player.total_money < 30:
+            pygame.draw.rect(main_screen, (97, 12, 3), life_line_button, 0, 5)
+            if click and life_line_button.collidepoint((mx, my)):
+                error_sound.play()
+        elif life_line_button.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), life_line_button, 0, 5)
+            if click:
+                button_sound.play()
+                player.items["life_line"] += 1
+                player.total_money -= 30
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), life_line_button, 0, 5)
+
+        """ACHIEVEMENT BUTTONS"""
+
+        if completed_tutorial_trophy.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), completed_tutorial_trophy, 0, 5)
+            if click:
+                button_sound.play()
+                tutorial_active = not tutorial_active
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), completed_tutorial_trophy, 0, 5)
+
+        if earn_money_trophy.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), earn_money_trophy, 0, 5)
+            if click:
+                button_sound.play()
+                money_active = not money_active
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), earn_money_trophy, 0, 5)
+
+        if bet_won_trophy.collidepoint((mx, my)):
+            pygame.draw.rect(main_screen, (240, 20, 20), bet_won_trophy, 0, 5)
+            if click:
+                button_sound.play()
+                bet_active = not bet_active
+        else:
+            pygame.draw.rect(main_screen, (196, 16, 16), bet_won_trophy, 0, 5)
+
+        # Draws text on the screen
+        draw_text_outline("Distracting Shop", big_font, (255, 255, 255), main_screen, screen_width // 2,
+                          screen_height // 2 - 170)
+        draw_text_outline("X2 Bet-$20", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
+                          screen_height // 2 - 40)
+        draw_text_outline("X3 Bet-$35", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
+                          screen_height // 2 + 60)
+        draw_text_outline("Life Line-$30", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 234,
+                          screen_height // 2 + 160)  # shifts it a little to the left to make it fit the rect
+
+        """TOGGLED TEXTS"""
+
+        if tutorial_active:
+            if len(player.tutorials_completed) == 7:
+                draw_text_outline(f"Completed All", medium_font, (255, 255, 255),
+                                  main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
+            else:
+                draw_text_outline(f"{len(player.tutorials_completed)} Completed!", medium_font, (255, 255, 255),
+                                  main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
+        else:
+            draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                              screen_height // 2 - 40)
+
+        if money_active:
+            draw_text_outline(f"${player.total_money_won} Won!", medium_font, (255, 255, 255), main_screen,
+                              screen_width // 2 + 240, screen_height // 2 + 60)
+        else:
+            draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                              screen_height // 2 + 60)
+
+        if bet_active:
+            draw_text_outline(f"{player.bet_won} Bets Won!", medium_font, (255, 255, 255), main_screen,
+                              screen_width // 2 + 240, screen_height // 2 + 160)
+        else:
+            draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
+                              screen_height // 2 + 160)
+
+        # basic UI elements
         item_UI()
         money_UI()
 
@@ -374,631 +1059,6 @@ def tutorial_select(message):
         clock.tick(60)
 
 
-def betting_screen():
-    """the screen for selecting which type of bet the player wants"""
-
-    """---------------------------------SETUP-------------------------------"""
-    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
-
-    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-
-    table = pygame.image.load("Assets/table.png")
-    table = pygame.transform.scale(table, (765, 464))
-    table_rec = table.get_rect()
-    table_rec.center = (640, 200)
-
-    smallbet_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
-    medbet_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
-    bigbet_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
-    home_button = pygame.Rect(30, 20, 120, 60)
-    quit_button = pygame.Rect(1130, 20, 120, 60)
-
-    """"----------------------------------LOOP-------------------------------"""
-
-    while True:  # screen loop
-        main_screen.blit(start_background, (0, 0))  # creates the background image
-
-        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
-
-        universal_UI(home_button, quit_button, mx, my, click)
-
-        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
-        if smallbet_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), smallbet_button, 0, 5)
-            if click:
-                button_sound.play()
-                wager_screen("small")
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), smallbet_button, 0, 5)
-
-        if medbet_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), medbet_button, 0, 5)
-            if click:
-                button_sound.play()
-                wager_screen("med")
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), medbet_button, 0, 5)
-
-        if bigbet_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), bigbet_button, 0, 5)
-            if click:
-                button_sound.play()
-                wager_screen("big")
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), bigbet_button, 0, 5)
-
-        draw_text_outline("Bet Small", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                          screen_height // 2 + 100)
-        draw_text_outline("Bet Med", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                          screen_height // 2 + 100)
-        draw_text_outline("Bet Big", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                          screen_height // 2 + 100)
-
-        item_UI()
-        money_UI()
-
-        click = False  # resets the mouse click
-
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-
-        main_screen.blit(table, table_rec)
-        draw_text_outline("Bet Difficulty!", big_font, (255, 255, 255), main_screen, 645, 200)
-        draw_text_outline("Hard Bets:", medium_font, (255, 255, 255), main_screen, 645, 250)
-        draw_text_outline("Greater Rewards", medium_font, (255, 255, 255), main_screen, 645, 285)
-
-        # updates the game and tick
-        pygame.display.update()
-        clock.tick(60)
-
-
-def wager_screen(mode):
-    """the screen for selecting which wager the player wants
-
-    :param mode: the mode the player chose, string
-    """
-
-    """---------------------------------SETUP-------------------------------"""
-
-    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
-
-    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-
-    table = pygame.image.load("Assets/table.png")
-    table = pygame.transform.scale(table, (765, 464))
-    table_rec = table.get_rect()
-    table_rec.center = (640, 200)
-
-    wager1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
-    wager2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
-    wager3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
-    home_button = pygame.Rect(30, 20, 120, 60)
-    quit_button = pygame.Rect(1130, 20, 120, 60)
-
-    """"----------------------------------LOOP-------------------------------"""
-
-    while True:  # screen loop
-        main_screen.blit(start_background, (0, 0))  # creates the background image
-
-        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
-
-        universal_UI(home_button, quit_button, mx, my, click)
-
-        # Check for mouse over and mouse click on the button, button changes color on mouse over
-        if player.total_money < 15:
-            pygame.draw.rect(main_screen, (97, 12, 3), wager1_button, 0, 5)
-            if click and wager1_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif wager1_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), wager1_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.bet(15)
-                betting_game_screen(mode)
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), wager1_button, 0, 5)
-
-        if player.total_money < 25:
-            pygame.draw.rect(main_screen, (97, 12, 3), wager2_button, 0, 5)
-            if click and wager2_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif wager2_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), wager2_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.bet(25)
-                betting_game_screen(mode)
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), wager2_button, 0, 5)
-
-        if player.total_money < 50:
-            pygame.draw.rect(main_screen, (97, 12, 3), wager3_button, 0, 5)
-            if click and wager3_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif wager3_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), wager3_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.bet(50)
-                betting_game_screen(mode)
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), wager3_button, 0, 5)
-
-        draw_text_outline("$15", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                          screen_height // 2 + 100)
-        draw_text_outline("$25", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                          screen_height // 2 + 100)
-        draw_text_outline("$50", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                          screen_height // 2 + 100)
-
-        item_UI()
-        money_UI()
-
-        click = False  # resets the mouse click
-
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-
-        main_screen.blit(table, table_rec)
-        draw_text_outline("Select Wager!", big_font, (255, 255, 255), main_screen, 640, 200)
-
-        # updates the game and tick
-        pygame.display.update()
-        clock.tick(60)
-
-
-def betting_game_screen(mode):
-    """the screen for main problem/items/answer choices
-
-    :param mode: the mode the player chose, string
-    """
-
-    """---------------------------------SETUP-------------------------------"""
-
-    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
-
-    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-
-    table = pygame.image.load("Assets/table.png")
-    table = pygame.transform.scale(table, (765, 464))
-    table_rec = table.get_rect()
-    table_rec.center = (640, 200)
-
-    # Problem and answer generation with common factors
-    if mode == "small":
-        operator = random.randint(0, 1)
-        common_factor = random.randint(2, 12)
-
-        if operator == 0:
-            fraction_1 = Fraction(common_factor * random.randint(1, 4), random.randint(1, 41))
-            fraction_2 = Fraction(random.randint(1, 27), common_factor * random.randint(1, 3))
-            answer = fraction_1 * fraction_2
-            answer_string = f"{fraction_1} × {fraction_2}"
-        else:
-            fraction_1 = Fraction(common_factor * random.randint(1, 4), random.randint(1, 41))
-            fraction_2 = Fraction(common_factor * random.randint(1, 3), random.randint(1, 27))
-            answer = fraction_1 / fraction_2
-            answer_string = f"{fraction_1} ÷ {fraction_2}"
-    elif mode == "med":
-        operator = random.randint(0, 3)
-        common_factor = random.randint(12, 24)
-
-        if operator == 0:
-            fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
-            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
-            answer = fraction_1 * fraction_2
-            answer_string = f"{fraction_1} × {fraction_2}"
-        elif operator == 1:
-            fraction_1 = Fraction(common_factor * random.randint(2, 5), random.randint(5, 50))
-            fraction_2 = Fraction(common_factor * random.randint(2, 4), random.randint(5, 50))
-            answer = fraction_1 / fraction_2
-            answer_string = f"{fraction_1} ÷ {fraction_2}"
-        elif operator == 2:
-            fraction_1 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 5))
-            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
-            answer = fraction_1 + fraction_2
-            answer_string = f"{fraction_1} + {fraction_2}"
-        else:
-            fraction_1 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 5))
-            fraction_2 = Fraction(random.randint(5, 50), common_factor * random.randint(2, 4))
-            answer = fraction_1 - fraction_2
-            answer_string = f"{fraction_1} - {fraction_2}"
-    else:
-        operator = random.randint(0, 9)
-        common_factor = random.randint(14, 31)
-
-        if operator == 0:
-            fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
-            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
-            answer = fraction_1 * fraction_2
-            answer_string = f"{fraction_1} × {fraction_2}"
-        elif operator == 1 or operator == 2:
-            fraction_1 = Fraction(common_factor * random.randint(3, 7), random.randint(15, 99))
-            fraction_2 = Fraction(common_factor * random.randint(5, 11), random.randint(15, 99))
-            answer = fraction_1 / fraction_2
-            answer_string = f"{fraction_1} ÷ {fraction_2}"
-        elif operator == 3 or operator == 4 or operator == 5:
-            fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
-            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
-            answer = fraction_1 + fraction_2
-            answer_string = f"{fraction_1} + {fraction_2}"
-        else:
-            fraction_1 = Fraction(random.randint(15, 99), common_factor * random.randint(3, 7))
-            fraction_2 = Fraction(random.randint(15, 99), common_factor * random.randint(5, 11))
-            answer = fraction_1 - fraction_2
-            answer_string = f"{fraction_1} - {fraction_2}"
-
-    fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
-    fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
-    while fake_answer_1 == fake_answer_2 or fake_answer_1 == answer or fake_answer_2 == answer:  # Validates the answers
-        fake_answer_1 = answer * Fraction(random.randint(1, 3), random.randint(2, 5))
-        fake_answer_2 = answer * Fraction(random.randint(1, 6), random.randint(3, 9))
-
-    correct_answer = random.randint(1, 3)  # Between choice 1, 2, and 3
-
-    # Button recs
-    item1_button = pygame.Rect((screen_width // 2) - 500, (screen_height // 2) + 60, 200, 80)
-    item2_button = pygame.Rect((screen_width // 2) - 100, (screen_height // 2) + 60, 200, 80)
-    item3_button = pygame.Rect((screen_width // 2) + 300, (screen_height // 2) + 60, 200, 80)
-    ans1 = pygame.Rect((screen_width // 2) - 550, (screen_height // 2) + 200, 300, 80)
-    ans2 = pygame.Rect((screen_width // 2) - 150, (screen_height // 2) + 200, 300, 80)
-    ans3 = pygame.Rect((screen_width // 2) + 250, (screen_height // 2) + 200, 300, 80)
-
-    # Item booleans
-    double_active = False
-    triple_active = False
-
-    """"----------------------------------LOOP-------------------------------"""
-
-    while True:  # screen loop
-        main_screen.blit(start_background, (0, 0))  # creates the background image
-
-        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
-
-        """Item Buttons"""
-
-        # Check for mouse over and mouse click on the easy button, button changes color on mouse over
-        if double_active:
-            pygame.draw.rect(main_screen, (8, 82, 3), item1_button, 0, 5)
-            if click and item1_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif player.items["double_bet"] == 0:
-            pygame.draw.rect(main_screen, (97, 12, 3), item1_button, 0, 5)
-            if click and item1_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif item1_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), item1_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.items["double_bet"] -= 1
-                player.money_on_table *= 2
-                double_active = True
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), item1_button, 0, 5)
-
-        if triple_active:
-            pygame.draw.rect(main_screen, (8, 82, 3), item2_button, 0, 5)
-            if click and item2_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif player.items["triple_bet"] == 0:
-            pygame.draw.rect(main_screen, (97, 12, 3), item2_button, 0, 5)
-            if click and item2_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif item2_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), item2_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.items["triple_bet"] -= 1
-                player.money_on_table *= 3
-                triple_active = True
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), item2_button, 0, 5)
-
-        if player.items["life_line"] == 0:
-            pygame.draw.rect(main_screen, (97, 12, 3), item3_button, 0, 5)
-            if click and item3_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif item3_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), item3_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.items["life_line"] -= 1
-                player.money_on_table = 0
-                betting_screen()
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), item3_button, 0, 5)
-
-        """Answer Buttons"""
-
-        if ans1.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), ans1, 0, 5)
-            if click:
-                button_sound.play()
-                if correct_answer == 1:
-                    results(mode, True, answer, answer_string)
-                else:
-                    results(mode, False, answer, answer_string)
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), ans1, 0, 5)
-
-        if ans2.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), ans2, 0, 5)
-            if click:
-                button_sound.play()
-                if correct_answer == 2:
-                    results(mode, True, answer, answer_string)
-                else:
-                    results(mode, False, answer, answer_string)
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), ans2, 0, 5)
-
-        if ans3.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), ans3, 0, 5)
-            if click:
-                button_sound.play()
-                if correct_answer == 3:
-                    results(mode, True, answer, answer_string)
-                else:
-                    results(mode, False, answer, answer_string)
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), ans3, 0, 5)
-
-        main_screen.blit(table, table_rec)
-        draw_text_outline(answer_string, big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
-
-        draw_text_outline("X2 Wager", small_font, (255, 255, 255), main_screen, (screen_width // 2) - 400,
-                          screen_height // 2 + 100)
-        draw_text_outline("X3 Wager", small_font, (255, 255, 255), main_screen, (screen_width // 2),
-                          screen_height // 2 + 100)
-        draw_text_outline("Life Line", small_font, (255, 255, 255), main_screen, (screen_width // 2) + 400,
-                          screen_height // 2 + 100)
-
-        """Assigning answer to the corresponding options"""
-
-        answer_choice_text(correct_answer, answer, fake_answer_1, fake_answer_2)
-
-        item_UI()
-        money_UI()
-
-        click = False  # resets the mouse click
-
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                player.lose()
-                quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-
-        # updates the game and tick
-        pygame.display.update()
-        clock.tick(60)
-
-
-def results(mode, outcome, answer, question):
-    """the screen for the results of the bet"""
-
-    """---------------------------------SETUP-------------------------------"""
-
-    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
-
-    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-
-    if outcome:
-        money_won = player.win(mode)
-    else:
-        wage = player.money_on_table
-        player.lose()
-
-    table = pygame.image.load("Assets/table.png")
-    table = pygame.transform.scale(table, (765, 464))
-    table_rec = table.get_rect()
-    table_rec.center = (640, 200)
-
-    home_button = pygame.Rect(30, 20, 120, 60)
-    quit_button = pygame.Rect(1130, 20, 120, 60)
-
-    """"----------------------------------LOOP-------------------------------"""
-
-    while True:  # screen loop
-        main_screen.blit(start_background, (0, 0))  # creates the background image
-
-        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
-
-        universal_UI(home_button, quit_button, mx, my, click)
-
-        if outcome:
-            draw_text_outline(f"Correct! +${money_won}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height // 2 + 100)
-        else:
-            draw_text_outline(f"Incorrect! -${wage}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height // 2 + 100)
-            draw_text_outline(f"Correct Answer: {answer}", big_font, (255, 255, 255), main_screen, (screen_width // 2),
-                              screen_height // 2 + 150)
-
-        money_UI()
-
-        click = False  # resets the mouse click
-
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-
-        main_screen.blit(table, table_rec)
-        draw_text_outline(question,
-                          big_font, (255, 255, 255), main_screen, (screen_width // 2), 200)
-
-        # updates the game and tick
-        pygame.display.update()
-        clock.tick(60)
-
-
-def shop_screen():
-    """the screen for the shop and progress"""
-
-    """---------------------------------SETUP-------------------------------"""
-    click = False  # resets the mouse click to avoid a bug where one click would trigger two events
-
-    pygame.mouse.set_visible(True)  # deals with the visibility of the mouse. allows  user to see and move their mouse
-
-    # Rects for the two buttons
-    double_bet_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 - 80, 370, 80)
-    triple_bet_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 20, 370, 80)
-    life_line_button = pygame.Rect(screen_width // 2 - 420, screen_height // 2 + 120, 370, 80)
-    completed_tutorial_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 - 80, 370, 80)
-    earn_money_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 20, 370, 80)
-    bet_won_trophy = pygame.Rect(screen_width // 2 + 50, screen_height // 2 + 120, 370, 80)
-    home_button = pygame.Rect(30, 20, 120, 60)
-    quit_button = pygame.Rect(1130, 20, 120, 60)
-
-    # Trophy booleans
-    tutorial_active = False
-    money_active = False
-    bet_active = False
-
-    """"----------------------------------LOOP-------------------------------"""
-
-    while True:
-        main_screen.blit(start_background, (0, 0))  # creates the background image
-
-        mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
-
-        universal_UI(home_button, quit_button, mx, my, click)
-
-        """Items Buttons"""
-
-        if player.total_money < 20:
-            pygame.draw.rect(main_screen, (97, 12, 3), double_bet_button, 0, 5)
-            if click and double_bet_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif double_bet_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), double_bet_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.items["double_bet"] += 1
-                player.total_money -= 20
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), double_bet_button, 0, 5)
-
-        if player.total_money < 35:
-            pygame.draw.rect(main_screen, (97, 12, 3), triple_bet_button, 0, 5)
-            if click and triple_bet_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif triple_bet_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), triple_bet_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.items["triple_bet"] += 1
-                player.total_money -= 35
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), triple_bet_button, 0, 5)
-
-        if player.total_money < 30:
-            pygame.draw.rect(main_screen, (97, 12, 3), life_line_button, 0, 5)
-            if click and life_line_button.collidepoint((mx, my)):
-                error_sound.play()
-        elif life_line_button.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), life_line_button, 0, 5)
-            if click:
-                button_sound.play()
-                player.items["life_line"] += 1
-                player.total_money -= 30
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), life_line_button, 0, 5)
-
-        """Trophies Buttons"""
-
-        if completed_tutorial_trophy.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), completed_tutorial_trophy, 0, 5)
-            if click:
-                button_sound.play()
-                tutorial_active = not tutorial_active
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), completed_tutorial_trophy, 0, 5)
-
-        if earn_money_trophy.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), earn_money_trophy, 0, 5)
-            if click:
-                button_sound.play()
-                money_active = not money_active
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), earn_money_trophy, 0, 5)
-
-        if bet_won_trophy.collidepoint((mx, my)):
-            pygame.draw.rect(main_screen, (240, 20, 20), bet_won_trophy, 0, 5)
-            if click:
-                button_sound.play()
-                bet_active = not bet_active
-        else:
-            pygame.draw.rect(main_screen, (196, 16, 16), bet_won_trophy, 0, 5)
-
-        # Draws text on the menu screen
-        draw_text_outline("Distracting Shop", big_font, (255, 255, 255), main_screen, screen_width // 2,
-                          screen_height // 2 - 170)
-        draw_text_outline("X2 Bet-$20", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
-                          screen_height // 2 - 40)
-        draw_text_outline("X3 Bet-$35", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 230,
-                          screen_height // 2 + 60)
-        draw_text_outline("Life Line-$30", medium_font, (255, 255, 255), main_screen, screen_width // 2 - 234,
-                          screen_height // 2 + 160)  # shifts it a little to the left to make it fit the rect
-
-        if tutorial_active:
-            if len(player.tutorials_completed) == 7:
-                draw_text_outline(f"Completed All", medium_font, (255, 255, 255),
-                                  main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
-            else:
-                draw_text_outline(f"{len(player.tutorials_completed)} Completed!", medium_font, (255, 255, 255),
-                                  main_screen, screen_width // 2 + 240, screen_height // 2 - 40)
-        else:
-            draw_text_outline("Tutorials!", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
-                              screen_height // 2 - 40)
-
-        if money_active:
-            draw_text_outline(f"${player.total_money_won} Won!", medium_font, (255, 255, 255), main_screen,
-                              screen_width // 2 + 240, screen_height // 2 + 60)
-        else:
-            draw_text_outline("Money Won", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
-                              screen_height // 2 + 60)
-
-        if bet_active:
-            draw_text_outline(f"{player.bet_won} Bets Won!", medium_font, (255, 255, 255), main_screen,
-                              screen_width // 2 + 240, screen_height // 2 + 160)
-        else:
-            draw_text_outline("Bets Won", medium_font, (255, 255, 255), main_screen, screen_width // 2 + 230,
-                              screen_height // 2 + 160)
-
-        item_UI()
-        money_UI()
-
-        click = False  # resets the click event, prevents one click -> two actions
-
-        # Checks for game events
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                click = True
-
-        pygame.display.update()
-        clock.tick(60)
-
-
 def special_tutorials(tut_types):
     """the screen for the player to select a special type of tutorial
 
@@ -1027,6 +1087,8 @@ def special_tutorials(tut_types):
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
+        """NAVIGATIONAL UI BUTTONS"""
+
         if back_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (64, 128, 230), back_button, 0, 5)
             if click:
@@ -1043,7 +1105,7 @@ def special_tutorials(tut_types):
         else:
             pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
 
-        money_UI()
+        """TUTORIAL BUTTONS"""
 
         if option1_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), option1_button, 0, 5)
@@ -1067,6 +1129,8 @@ def special_tutorials(tut_types):
 
         draw_text_outline("Back", small_font, (255, 255, 255), main_screen, 90, 50)
         draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
+
+        money_UI()
 
         click = False
         for event in pygame.event.get():
@@ -1110,7 +1174,7 @@ def tutorials(tutorial):
 
         mx, my = pygame.mouse.get_pos()  # deals with the mouse positions
 
-        money_UI()
+        """NAVIGATIONAL UI BUTTONS"""
 
         if back_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (64, 128, 230), back_button, 0, 5)
@@ -1127,6 +1191,8 @@ def tutorials(tutorial):
                 sys.exit()
         else:
             pygame.draw.rect(main_screen, (46, 102, 191), quit_button, 0, 5)
+
+        """TUTORIAL BUTTONS"""
 
         if next_button.collidepoint((mx, my)):
             pygame.draw.rect(main_screen, (240, 20, 20), next_button, 0, 5)
@@ -1162,9 +1228,9 @@ def tutorials(tutorial):
             draw_text_outline('Start', medium_font, (255, 255, 255), main_screen, screen_width//2, 650)
         elif clicks == len(steps) - 1:
             draw_text_outline('Again', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
-            if tutorial not in player.tutorials_completed:
+            if tutorial not in player.tutorials_completed:  # adds the tutorial to the completed list
                 player.tutorials_completed.append(tutorial)
-                player.total_money += 25
+                player.total_money += 25  # can only earn the $25 once, prevents exploits
             finished = True
         else:
             draw_text_outline('Next', medium_font, (255, 255, 255), main_screen, screen_width // 2, 650)
@@ -1176,6 +1242,8 @@ def tutorials(tutorial):
         draw_text_outline("Quit", small_font, (255, 255, 255), main_screen, 1190, 50)
 
         click = False  # resets the mouse click
+
+        money_UI()
 
         # Checks for game events
         for event in pygame.event.get():
